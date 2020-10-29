@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:natuvida_flutter/model/postagemModel.dart';
 
 class Perguntas extends StatefulWidget {
   @override
@@ -14,6 +18,7 @@ class _PerguntasState extends State<Perguntas>
   final respostaController = TextEditingController();
   AnimationController _rotationController;
   Animation rotation;
+  List<PostagemModel> conteudo = new List<PostagemModel>();
 
   void _geraPerguntas() {
     this.perguntas.add("O que te faz bem?");
@@ -22,21 +27,18 @@ class _PerguntasState extends State<Perguntas>
     this.perguntas.add("O que te torna forte?");
     this.perguntas.add("O que te enfraquece?");
     this.perguntas.add("O que você precisa melhorar?");
-    this.perguntas.forEach((element) {
+    this.conteudo.forEach((element) {
       this.respostas.add("");
-    });
-    setState(() {
-      questionText = perguntas[0];
     });
   }
 
   void _buttonAvancar() {
-    if (questionIndex < perguntas.length - 1) {
+    if (questionIndex < conteudo.length - 1) {
       setState(() {
         this.respostas[questionIndex] = respostaController.text;
 
         questionIndex++;
-        questionText = perguntas[questionIndex];
+        questionText = conteudo[questionIndex].texto;
         if (this.respostas[questionIndex].toString().isNotEmpty)
           respostaController.text = this.respostas[questionIndex];
         else
@@ -49,22 +51,41 @@ class _PerguntasState extends State<Perguntas>
     if (questionIndex > 0) {
       setState(() {
         questionIndex--;
-        questionText = perguntas[questionIndex];
+        questionText = conteudo[questionIndex].texto;
         respostaController.text = this.respostas[questionIndex];
       });
     }
+  }
+
+  Future<String> _loadFromAsset() async {
+    return await rootBundle
+        .loadString("assets/Auto-Conhecimento-Conteudo.json");
+  }
+
+  Future parseJson() async {
+    String jsonString = await _loadFromAsset();
+    final jsonResponse = jsonDecode(jsonString) as List;
+    conteudo = jsonResponse.map((e) => PostagemModel.fromJson(e)).toList();
+    // .map((data) => PostagemModel.fromJson(data))
+    // .toList();
+
+    setState(() {
+      questionText = conteudo[0].texto;
+    });
+    _geraPerguntas();
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _geraPerguntas();
-    _rotationController = AnimationController(
-        duration: Duration(milliseconds: 500), vsync: this);
-        _rotationController.forward();
-        rotation = Tween(begin: 0.0, end: 2.0).animate(_rotationController);
+    parseJson();
+    _rotationController =
+        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    _rotationController.forward();
+    rotation = Tween(begin: 0.0, end: 2.0).animate(_rotationController);
   }
+
   @override
   void dispose() {
     _rotationController.dispose();
@@ -73,7 +94,6 @@ class _PerguntasState extends State<Perguntas>
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -87,16 +107,30 @@ class _PerguntasState extends State<Perguntas>
           ),
         ),
       ),
-      body: 
-      // CustomPaint(
-      //   size: Size(380, 625),
-      //   painter: RPSCustomPainter(),
-      //   child: 
-        SingleChildScrollView(
+      body:
+          // CustomPaint(
+          //   size: Size(380, 625),
+          //   painter: RPSCustomPainter(),
+          //   child:
+          SingleChildScrollView(
         child: Center(
           child: Column(
             children: [
-              Padding(
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                padding: EdgeInsets.all(10),
+                child:
+                IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                      ),
+                      onPressed: () {
+                        _buttonRetrocerder();
+                      },
+                    ),
+                  ),
+Padding(
                 padding: EdgeInsets.only(bottom: 15, top: 15),
                 child: Chip(
                     label: Text(
@@ -110,46 +144,29 @@ class _PerguntasState extends State<Perguntas>
               ),
               Padding(
                 padding: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.arrow_back_ios,
-                      ),
-                      onPressed: () {
-                        _buttonRetrocerder();
-                      },
-                    ),
-                    Text(
-                      "Quem é você?",
-                      style: TextStyle(fontSize: 24),
-                    ),
-                    IconButton(
+                child:IconButton(
                       icon: Icon(
                         Icons.arrow_forward_ios,
                       ),
                       onPressed: () {
-                        if(_rotationController.isCompleted){
+                        if (_rotationController.isCompleted) {
                           _rotationController.value = 0;
                           _rotationController.forward();
                         }
-                        
+
                         _buttonAvancar();
                       },
                     ),
-                  ],
-                ),
               ),
-              Padding(
-                padding: EdgeInsets.all(35),
-              ),
+              ],),
+              
+              
               Wrap(children: [
                 Center(
                   child: RotationTransition(
                     turns: rotation,
                     child: Container(
-                      margin: EdgeInsets.only(left: 50, right: 50),
+                      margin: EdgeInsets.only(left: 30, right: 30, bottom: 20),
                       padding: EdgeInsets.all(15),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -170,23 +187,54 @@ class _PerguntasState extends State<Perguntas>
                   ),
                 ),
               ]),
+              conteudo[questionIndex].flPergunta == true &&
+              conteudo[questionIndex].respostaText == false ?
               Container(
-                margin: EdgeInsets.all(40),
-                child: TextField(
-                  controller: respostaController,
-                  decoration: InputDecoration(
-                    // filled: true,
-                    // fillColor: Color(0x22cffdcd),
-                      border: OutlineInputBorder(), labelText: 'Resposta...'),
-                  maxLines: 2,
-                ),
-              ),
+                child: Column(children: [
+                  RaisedButton(
+                    color: respostas[questionIndex] == "sim"
+                        ? Colors.green
+                        : Colors.white,
+                    child: Text("Sim", style: TextStyle(color: respostas[questionIndex] == "sim" ? Colors.white : Colors.black),),
+                    onPressed: () {
+                      setState((){
+                      respostas[questionIndex] = "sim";
+                      });
+                    },
+                  ),
+                  RaisedButton(
+                    color: respostas[questionIndex] == "nao"
+                        ? Colors.red
+                        : Colors.white,
+                    child: Text("Não", style: TextStyle(color: respostas[questionIndex] == "nao" ? Colors.white : Colors.black)),
+                    onPressed: () {
+                      setState((){
+                      respostas[questionIndex] = "nao";
+                      });
+                    },
+                  ),
+                ]),
+              ) : Container(),
+              conteudo[questionIndex].respostaText
+                  ? Container(
+                      margin: EdgeInsets.all(40),
+                      child: TextField(
+                        controller: respostaController,
+                        decoration: InputDecoration(
+                            // filled: true,
+                            // fillColor: Color(0x22cffdcd),
+                            border: OutlineInputBorder(),
+                            labelText: 'Resposta...'),
+                        maxLines: 2,
+                      ),
+                    )
+                  : Container(),
               // Spacer(),
               Container(
                 width: double.maxFinite,
                 margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
                 padding: EdgeInsets.all(20),
-                child: questionIndex < perguntas.length - 1
+                child: questionIndex < conteudo.length - 1
                     ? RaisedButton(
                         color: Colors.red[50],
                         padding: EdgeInsets.all(10),
@@ -195,6 +243,10 @@ class _PerguntasState extends State<Perguntas>
                           style: TextStyle(color: Colors.black87, fontSize: 18),
                         ),
                         onPressed: () {
+                          if (_rotationController.isCompleted) {
+                            _rotationController.value = 0;
+                            _rotationController.forward();
+                          }
                           _buttonAvancar();
                         },
                       )
@@ -218,27 +270,31 @@ class _PerguntasState extends State<Perguntas>
     );
   }
 }
-class RPSCustomPainter extends CustomPainter{
-  
+
+class RPSCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    
     Paint paint = new Paint()
       ..color = Color.fromARGB(118, 66, 179, 76)
       ..style = PaintingStyle.fill
       ..strokeWidth = 1;
-        
+
     Path path = Path();
-    path.moveTo(size.width*0.76,size.height*0.18);
-    path.quadraticBezierTo(size.width*0.67,size.height*0.22,size.width*0.66,size.height*0.26);
-    path.cubicTo(size.width*0.59,size.height*0.23,size.width*0.64,size.height*0.32,size.width*0.68,size.height*0.34);
-    path.quadraticBezierTo(size.width*0.71,size.height*0.35,size.width*0.76,size.height*0.37);
-    path.quadraticBezierTo(size.width*0.82,size.height*0.35,size.width*0.84,size.height*0.34);
-    path.cubicTo(size.width*0.89,size.height*0.32,size.width*0.94,size.height*0.22,size.width*0.87,size.height*0.26);
-    path.quadraticBezierTo(size.width*0.85,size.height*0.22,size.width*0.76,size.height*0.18);
+    path.moveTo(size.width * 0.76, size.height * 0.18);
+    path.quadraticBezierTo(size.width * 0.67, size.height * 0.22,
+        size.width * 0.66, size.height * 0.26);
+    path.cubicTo(size.width * 0.59, size.height * 0.23, size.width * 0.64,
+        size.height * 0.32, size.width * 0.68, size.height * 0.34);
+    path.quadraticBezierTo(size.width * 0.71, size.height * 0.35,
+        size.width * 0.76, size.height * 0.37);
+    path.quadraticBezierTo(size.width * 0.82, size.height * 0.35,
+        size.width * 0.84, size.height * 0.34);
+    path.cubicTo(size.width * 0.89, size.height * 0.32, size.width * 0.94,
+        size.height * 0.22, size.width * 0.87, size.height * 0.26);
+    path.quadraticBezierTo(size.width * 0.85, size.height * 0.22,
+        size.width * 0.76, size.height * 0.18);
     path.close();
 
-    
     canvas.drawPath(path, paint);
   }
 
@@ -246,5 +302,4 @@ class RPSCustomPainter extends CustomPainter{
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
   }
-  
 }

@@ -36,19 +36,22 @@ class _HomeState extends State<Home> {
                         child: Text(
                           "Marcus Vinícius da Fonseca Antunes",
                           overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 12),
                         ),
                       ),
                       Container(
                         width: 170,
                         margin: EdgeInsets.only(left: 10),
                         child: Text(
-                          "marcuspa3@gmail.comdasdasdasdasdads",
+                          "marcuspa3@gmail.com",
                           overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 12),
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 10),
-                        child: Text("(45) 99844-9756"),
+                        child: Text("(45) 99844-9756",
+                        style: TextStyle(fontSize: 12),),
                       ),
                     ])
               ]),
@@ -75,7 +78,7 @@ class _HomeState extends State<Home> {
                 child: Text("Sobre Nós"),
               ),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.popAndPushNamed(context, '/sobrenos');
               },
             ),
           ]),
@@ -118,80 +121,219 @@ class _HomeState extends State<Home> {
             ),
             Expanded(
               child: SizedBox(
-                child: new ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: 6,
-                  itemBuilder: (BuildContext ctxt, int index) {
-                    return GestureDetector(
-                      child: Container(
-                        width: double.maxFinite,
-                        height: 200,
-                        margin: EdgeInsets.only(
-                            top: 10, bottom: 10, left: 25, right: 25),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black12),
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey[100],
-                        ),
-                        child: Center(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10),
-                                    ),
-                                  ),
-                                  child: Image(
-                                    fit: BoxFit.fitWidth,
-                                    image: AssetImage('assets/duvida.jpg'),
-                                    height: 110,
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 20),
-                                      child: Text(
-                                        "Quem é você?",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
+                child: new ListView(
+                  children: [
+                    GestureDetector(
+                        child: Container(
+                          width: double.maxFinite,
+                          height: 200,
+                          margin: EdgeInsets.only(
+                              top: 10, bottom: 10, left: 25, right: 25),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black12),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey[100],
+                          ),
+                          child: Center(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        right: 20,
+                                    child: Image(
+                                      fit: BoxFit.fitWidth,
+                                      image: AssetImage('assets/duvida.jpg'),
+                                      height: 110,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20),
+                                        child: Text(
+                                          "Quem é você?",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
-                                      child: Chip(
-                                          label: Text(
-                                            "Auto Conhecimento",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12),
-                                          ),
-                                          backgroundColor:
-                                              Colors.lightGreen[600]),
-                                    )
-                                  ],
-                                ),
-                                Padding(
-                                    padding: EdgeInsets.only(left: 20, top: 10),
-                                    child: Text("12 de set. 2020",
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle()))
-                              ]),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          right: 20,
+                                        ),
+                                        child: Chip(
+                                            label: Text(
+                                              "Auto Conhecimento",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12),
+                                            ),
+                                            backgroundColor:
+                                                Colors.lightGreen[600]),
+                                      )
+                                    ],
+                                  ),
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 20, top: 10),
+                                      child: Text("12 de set. 2020",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle()))
+                                ]),
+                          ),
                         ),
-                      ),
-                    onTap: (){
-                      Navigator.pushNamed(context, '/postagem');
-                    });
-                  },
+                        onTap: () {
+                          Navigator.pushNamed(context, '/postagem', arguments: "auto-conhecimento");
+                        }),
+                    GestureDetector(
+                        child: Container(
+                          width: double.maxFinite,
+                          height: 200,
+                          margin: EdgeInsets.only(
+                              top: 10, bottom: 10, left: 25, right: 25),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black12),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey[100],
+                          ),
+                          child: Center(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Image(
+                                      fit: BoxFit.fitWidth,
+                                      image: AssetImage('assets/duvida.jpg'),
+                                      height: 110,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20),
+                                        child: Text(
+                                          "Quem é você?",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          right: 20,
+                                        ),
+                                        child: Chip(
+                                            label: Text(
+                                              "Auto Conhecimento",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12),
+                                            ),
+                                            backgroundColor:
+                                                Colors.lightGreen[600]),
+                                      )
+                                    ],
+                                  ),
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 20, top: 10),
+                                      child: Text("12 de set. 2020",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle()))
+                                ]),
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(context, '/postagem', arguments: "emocoes");
+                        }),
+                    GestureDetector(
+                        child: Container(
+                          width: double.maxFinite,
+                          height: 200,
+                          margin: EdgeInsets.only(
+                              top: 10, bottom: 10, left: 25, right: 25),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black12),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey[100],
+                          ),
+                          child: Center(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Image(
+                                      fit: BoxFit.fitWidth,
+                                      image: AssetImage('assets/duvida.jpg'),
+                                      height: 110,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20),
+                                        child: Text(
+                                          "Quem é você?",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          right: 20,
+                                        ),
+                                        child: Chip(
+                                            label: Text(
+                                              "Auto Conhecimento",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12),
+                                            ),
+                                            backgroundColor:
+                                                Colors.lightGreen[600]),
+                                      )
+                                    ],
+                                  ),
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 20, top: 10),
+                                      child: Text("12 de set. 2020",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle()))
+                                ]),
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(context, '/postagem', arguments: "maslow");
+                        }),
+                  ],
                 ),
               ),
             ),

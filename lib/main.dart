@@ -4,6 +4,7 @@ import 'package:natuvida_flutter/Postagem/perguntas.dart';
 import 'Home/home.dart';
 import 'Postagem/finalizar.dart';
 import 'Postagem/postagem.dart';
+import 'SobreNos/sobre_nos.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
         '/postagem': (context) => Postagem(),
         '/perguntas': (context) => Perguntas(),
         '/finalizar': (context) => Finalizar(),
+        '/sobrenos' : (context) => SobreNos()
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,

@@ -54,34 +54,35 @@ class _FinalizarState extends State<Finalizar> {
                 ),
               ),
               //Titulo da Postagem
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  "Quem é você?",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.all(10),
+              //   child: Text(
+              //     "Quem é você?",
+              //     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              //   ),
+              // ),
               //Texto da postagem
               Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(20),
                 child: Text(
-                  "Obrigado por suas respostas!",
-                  style: TextStyle(fontSize: 18),
+                  "Obrigado por participar conosco!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
               ),
               Container(
                 padding: EdgeInsets.all(15),
                 height: 300,
                 width: double.maxFinite,
-                decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
+                // decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
                 child: Stack(
                   alignment: AlignmentDirectional.topCenter,
                   children: [
-                    Positioned(child: Icon(Icons.star,size: 120, color: Colors.amber,),),
-                    Positioned(right: 50, top: 90, child: Opacity(opacity: 0.6, child: Icon(Icons.star,size: 100, color: Colors.amber),),),
-                    Positioned(right: 30, top: 70, child: Opacity(opacity: 0.7, child: Icon(Icons.star,size: 100, color: Colors.amber),),),
-                    Positioned(right: 50, top: 50, child: Opacity(opacity: 0.8, child: Icon(Icons.star,size: 100, color: Colors.amber),),),
-                    Positioned(right: 70, top: 30, child: Opacity(opacity: 0.9, child: Icon(Icons.star,size: 100, color: Colors.amber,),),),
+                    Positioned(right: 130, child: Icon(Icons.star,size: 120, color: Colors.amber,),),
+                    Positioned(right: 60, top: 180, child: Opacity(opacity: 0.6, child: Icon(Icons.star,size: 100, color: Colors.amber),),),
+                    Positioned(right: 20, top: 130, child: Opacity(opacity: 0.7, child: Icon(Icons.star,size: 100, color: Colors.amber),),),
+                    Positioned(right: 40, top: 90, child: Opacity(opacity: 0.8, child: Icon(Icons.star,size: 100, color: Colors.amber),),),
+                    Positioned(right: 90, top: 50, child: Opacity(opacity: 0.9, child: Icon(Icons.star,size: 100, color: Colors.amber,),),),
                     // Positioned(child: Icon(Icons.star),),
                   ],
                 ),

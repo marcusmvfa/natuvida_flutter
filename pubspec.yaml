@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.0
+  youtube_player_flutter: ^7.0.0+7
 
 dev_dependencies:
   flutter_test:
@@ -24,3 +25,9 @@ flutter:
   assets:
     - assets/profile_image.png
     - assets/duvida.jpg
+    - assets/perfilMarcus.jpg
+    - assets/perfilChris.jpg
+    - assets/perfilMonica.jpg
+    - assets/Auto-Conhecimento-Conteudo.json
+    - assets/Emocoes_e_cinco_linguagens_do_amor.json
+    - assets/Piramide_de_Maslow.json
