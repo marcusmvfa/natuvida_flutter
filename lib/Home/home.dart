@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:natuvida_flutter/Postagem/perguntas.dart';
+import 'package:natuvida_flutter/Postagem/postagem.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -158,7 +160,7 @@ class _HomeState extends State<Home> {
                                       Padding(
                                         padding: EdgeInsets.only(left: 20),
                                         child: Text(
-                                          "Quem é você?",
+                                          "Auto Conhecimento?",
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
@@ -191,7 +193,79 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         onTap: () {
-                          Navigator.pushNamed(context, '/postagem', arguments: "auto-conhecimento");
+                          // Navigator.pushNamed(context, '/postagem', arguments: "auto-conhecimento");
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Perguntas(argument: 'auto-conhecimento')));
+                        }),
+                    GestureDetector(
+                        child: Container(
+                          width: double.maxFinite,
+                          height: 200,
+                          margin: EdgeInsets.only(
+                              top: 10, bottom: 10, left: 25, right: 25),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black12),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey[100],
+                          ),
+                          child: Center(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Image(
+                                      fit: BoxFit.fitWidth,
+                                      image: AssetImage('assets/duvida.jpg'),
+                                      height: 110,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.only(left: 20),
+                                        width: 200,
+                                        child: Text(
+                                          "Emoções e as Cinco Linguagens do Amor",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          right: 20,
+                                        ),
+                                        child: Chip(
+                                            label: Text(
+                                              "Emoçoes",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12),
+                                            ),
+                                            backgroundColor:
+                                                Colors.amber),
+                                      )
+                                    ],
+                                  ),
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 20, top: 10),
+                                      child: Text("12 de set. 2020",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle()))
+                                ]),
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Perguntas(argument: 'emocoes')));
                         }),
                     GestureDetector(
                         child: Container(
@@ -228,7 +302,7 @@ class _HomeState extends State<Home> {
                                       Padding(
                                         padding: EdgeInsets.only(left: 20),
                                         child: Text(
-                                          "Quem é você?",
+                                          "Pirâmide de Maslow",
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
@@ -261,77 +335,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         onTap: () {
-                          Navigator.pushNamed(context, '/postagem', arguments: "emocoes");
-                        }),
-                    GestureDetector(
-                        child: Container(
-                          width: double.maxFinite,
-                          height: 200,
-                          margin: EdgeInsets.only(
-                              top: 10, bottom: 10, left: 25, right: 25),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black12),
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey[100],
-                          ),
-                          child: Center(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                      ),
-                                    ),
-                                    child: Image(
-                                      fit: BoxFit.fitWidth,
-                                      image: AssetImage('assets/duvida.jpg'),
-                                      height: 110,
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 20),
-                                        child: Text(
-                                          "Quem é você?",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          right: 20,
-                                        ),
-                                        child: Chip(
-                                            label: Text(
-                                              "Auto Conhecimento",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12),
-                                            ),
-                                            backgroundColor:
-                                                Colors.lightGreen[600]),
-                                      )
-                                    ],
-                                  ),
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 20, top: 10),
-                                      child: Text("12 de set. 2020",
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle()))
-                                ]),
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.pushNamed(context, '/postagem', arguments: "maslow");
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Perguntas(argument: 'maslow')));
                         }),
                   ],
                 ),

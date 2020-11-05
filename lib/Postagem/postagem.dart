@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
+import 'package:flutter/services.dart';
+import 'package:natuvida_flutter/Postagem/perguntas.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class Postagem extends StatefulWidget {
+  final String argument;
+
+  const Postagem({Key key, this.argument}) : super(key: key);
+
   @override
   _PostagemState createState() => _PostagemState();
 }
@@ -14,25 +20,35 @@ class _PostagemState extends State<Postagem>
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   YoutubePlayerController _controller;
 
-  PlayerState _playerState;
-  YoutubeMetaData _videoMetaData;
-  double _volume = 100;
-  bool _muted = false;
-  bool _isPlayerReady = false;
+  String caminho;
 
-  void listener() {
-    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
-      setState(() {
-        _playerState = _controller.value.playerState;
-        _videoMetaData = _controller.metadata;
-      });
+
+  void carregaArquivo(String arg) async {
+    String argumento = arg;
+    switch (argumento) {
+      case 'auto-conhecimento':
+        caminho = await rootBundle
+            .loadString("assets/Auto-Conhecimento-Conteudo.json");
+        break;
+
+      case 'emocoes':
+        caminho = await rootBundle
+            .loadString("assets/Emocoes_e_cinco_linguagens_do_amor.json");
+        print(caminho);
+        break;
+
+        case 'maslow':
+        caminho = await rootBundle
+            .loadString("assets/Piramide_de_Maslow.json");
+        print(caminho);
+        break;
     }
   }
 
   @override
   void initState() {
     super.initState();
-    print(ModalRoute.of(context).settings.arguments);
+    carregaArquivo(widget.argument);
 
     _controller = YoutubePlayerController(
       initialVideoId: 'https://youtu.be/9OiWA0qawIo',
@@ -45,9 +61,10 @@ class _PostagemState extends State<Postagem>
         forceHD: false,
         enableCaption: true,
       ),
-    )..addListener(listener);
-    _videoMetaData = const YoutubeMetaData();
-    _playerState = PlayerState.unknown;
+    );
+    // ..addListener(listener);
+    // _videoMetaData = const YoutubeMetaData();
+    // _playerState = PlayerState.unknown;
   }
 
   @override
@@ -142,16 +159,10 @@ class _PostagemState extends State<Postagem>
                   style: TextStyle(fontSize: 18),
                 ),
               ),
-              Padding(
+              Container(
                 padding: EdgeInsets.only(bottom: 20),
-                child: YoutubePlayer(
-                  controller: _controller,
-                  showVideoProgressIndicator: true,
-                  onReady: () {
-                    _isPlayerReady = true;
-                    _controller.addListener(listener);
-                  },
-                ),
+                height: 500,
+                // child: 
               ),
               Center(
                 child: Padding(
@@ -178,7 +189,12 @@ class _PostagemState extends State<Postagem>
                       ),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/perguntas');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Perguntas(
+                                    argument: caminho,
+                                  )));
                     },
                   ),
                 ),

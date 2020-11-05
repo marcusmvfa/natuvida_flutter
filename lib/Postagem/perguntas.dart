@@ -3,8 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:natuvida_flutter/model/postagemModel.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class Perguntas extends StatefulWidget {
+  final String argument;
+
+  const Perguntas({Key key, this.argument}) : super(key: key);
+  
   @override
   _PerguntasState createState() => _PerguntasState();
 }
@@ -19,6 +24,22 @@ class _PerguntasState extends State<Perguntas>
   AnimationController _rotationController;
   Animation rotation;
   List<PostagemModel> conteudo = new List<PostagemModel>();
+
+  PlayerState _playerState;
+  YoutubeMetaData _videoMetaData;
+  double _volume = 100;
+  bool _muted = false;
+  bool _isPlayerReady = false;
+
+  YoutubePlayerController _youtubePlayerController = YoutubePlayerController(
+    initialVideoId: '17ozSeGw-fY',
+    flags: YoutubePlayerFlags(
+      autoPlay: true,
+      mute: false,
+    ),
+  );
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   void _geraPerguntas() {
     this.perguntas.add("O que te faz bem?");
@@ -63,7 +84,24 @@ class _PerguntasState extends State<Perguntas>
   }
 
   Future parseJson() async {
-    String jsonString = await _loadFromAsset();
+    // String jsonString = await _loadFromAsset();
+    String jsonString = widget.argument;
+    switch (widget.argument) {
+      case 'auto-conhecimento':
+        jsonString = await rootBundle
+            .loadString("assets/Auto-Conhecimento-Conteudo.json");
+        break;
+
+      case 'emocoes':
+        jsonString = await rootBundle
+            .loadString("assets/Emocoes_e_cinco_linguagens_do_amor.json");
+        break;
+
+        case 'maslow':
+        jsonString = await rootBundle
+            .loadString("assets/Piramide_de_Maslow.json");
+        break;
+    }
     final jsonResponse = jsonDecode(jsonString) as List;
     conteudo = jsonResponse.map((e) => PostagemModel.fromJson(e)).toList();
     // .map((data) => PostagemModel.fromJson(data))
@@ -75,6 +113,28 @@ class _PerguntasState extends State<Perguntas>
     _geraPerguntas();
   }
 
+  
+  Widget _text(String title, String value) {
+    return RichText(
+      text: TextSpan(
+        text: '$title : ',
+        style: const TextStyle(
+          color: Colors.blueAccent,
+          fontWeight: FontWeight.bold,
+        ),
+        children: [
+          TextSpan(
+            text: value ?? '',
+            style: const TextStyle(
+              color: Colors.blueAccent,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -84,11 +144,14 @@ class _PerguntasState extends State<Perguntas>
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     _rotationController.forward();
     rotation = Tween(begin: 0.0, end: 2.0).animate(_rotationController);
+    _videoMetaData = const YoutubeMetaData();
+    _playerState = PlayerState.unknown;
   }
 
   @override
   void dispose() {
     _rotationController.dispose();
+    _youtubePlayerController.dispose();
     super.dispose();
   }
 
@@ -153,6 +216,7 @@ Padding(
                           _rotationController.value = 0;
                           _rotationController.forward();
                         }
+                        _youtubePlayerController.pause();
 
                         _buttonAvancar();
                       },
@@ -187,6 +251,62 @@ Padding(
                   ),
                 ),
               ]),
+              conteudo[questionIndex].video != null ? Container(
+                margin: EdgeInsets.only(right: 20, left: 20),
+                height: 200,
+child: YoutubePlayerBuilder(
+                // onExitFullScreen: () {
+                //   // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
+                //   SystemChrome.setPreferredOrientations(
+                //       DeviceOrientation.values);
+                // },
+                player: YoutubePlayer(
+                  controller: _youtubePlayerController,
+                  showVideoProgressIndicator: true,
+                  progressIndicatorColor: Colors.red,
+                  topActions: <Widget>[
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: Text(
+                        _youtubePlayerController.metadata.title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                    // IconButton(
+                    //   icon: const Icon(
+                    //     Icons.settings,
+                    //     color: Colors.white,
+                    //     size: 25.0,
+                    //   ),
+                    //   onPressed: () {
+                    //     print('Settings Tapped!');
+                    //   },
+                    // ),
+                  ],
+                  onReady: () {
+                    _isPlayerReady = true;
+                  },
+                ),
+                builder: (context, player) => Scaffold(
+                  key: _scaffoldKey,
+                  body: ListView(
+                    children: [
+                      player,
+                    ],
+                  ),
+                ),
+              )
+              ) : Container(),
+              conteudo[questionIndex].img != null ? Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+                margin: EdgeInsets.only(right:30, left: 30),
+                child: Image(image: AssetImage('assets/divertidamente.png'),),
+              ) : Container(),
               conteudo[questionIndex].flPergunta == true &&
               conteudo[questionIndex].respostaText == false ?
               Container(
