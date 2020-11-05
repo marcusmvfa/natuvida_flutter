@@ -9,7 +9,7 @@ class Perguntas extends StatefulWidget {
   final String argument;
 
   const Perguntas({Key key, this.argument}) : super(key: key);
-  
+
   @override
   _PerguntasState createState() => _PerguntasState();
 }
@@ -31,13 +31,7 @@ class _PerguntasState extends State<Perguntas>
   bool _muted = false;
   bool _isPlayerReady = false;
 
-  YoutubePlayerController _youtubePlayerController = YoutubePlayerController(
-    initialVideoId: '17ozSeGw-fY',
-    flags: YoutubePlayerFlags(
-      autoPlay: true,
-      mute: false,
-    ),
-  );
+  YoutubePlayerController _youtubePlayerController;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
@@ -64,6 +58,17 @@ class _PerguntasState extends State<Perguntas>
           respostaController.text = this.respostas[questionIndex];
         else
           respostaController.text = "";
+        if (conteudo[questionIndex].video != null) {
+          conteudo[questionIndex].video =
+              YoutubePlayer.convertUrlToId(conteudo[questionIndex].video);
+          _youtubePlayerController = YoutubePlayerController(
+            initialVideoId: conteudo[questionIndex].video,
+            flags: YoutubePlayerFlags(
+              autoPlay: true,
+              mute: false,
+            ),
+          )..reset();
+        }
       });
     }
   }
@@ -74,6 +79,17 @@ class _PerguntasState extends State<Perguntas>
         questionIndex--;
         questionText = conteudo[questionIndex].texto;
         respostaController.text = this.respostas[questionIndex];
+        if (conteudo[questionIndex].video != null) {
+          conteudo[questionIndex].video =
+              YoutubePlayer.convertUrlToId(conteudo[questionIndex].video);
+          _youtubePlayerController = YoutubePlayerController(
+            initialVideoId: conteudo[questionIndex].video,
+            flags: YoutubePlayerFlags(
+              autoPlay: true,
+              mute: false,
+            ),
+          )..reset();
+        }
       });
     }
   }
@@ -97,9 +113,9 @@ class _PerguntasState extends State<Perguntas>
             .loadString("assets/Emocoes_e_cinco_linguagens_do_amor.json");
         break;
 
-        case 'maslow':
-        jsonString = await rootBundle
-            .loadString("assets/Piramide_de_Maslow.json");
+      case 'maslow':
+        jsonString =
+            await rootBundle.loadString("assets/Piramide_de_Maslow.json");
         break;
     }
     final jsonResponse = jsonDecode(jsonString) as List;
@@ -113,7 +129,6 @@ class _PerguntasState extends State<Perguntas>
     _geraPerguntas();
   }
 
-  
   Widget _text(String title, String value) {
     return RichText(
       text: TextSpan(
@@ -179,35 +194,38 @@ class _PerguntasState extends State<Perguntas>
         child: Center(
           child: Column(
             children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                padding: EdgeInsets.all(10),
-                child:
-                IconButton(
+                    padding: EdgeInsets.all(10),
+                    child: questionIndex > 0 ? IconButton(
                       icon: Icon(
                         Icons.arrow_back_ios,
                       ),
                       onPressed: () {
+                        if (_youtubePlayerController != null) {
+                          _youtubePlayerController = null;
+                        }
                         _buttonRetrocerder();
                       },
-                    ),
+                    ) : Container(),
                   ),
-Padding(
-                padding: EdgeInsets.only(bottom: 15, top: 15),
-                child: Chip(
-                    label: Text(
-                      "Auto Conhecimento",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12),
-                    ),
-                    backgroundColor: Colors.lightGreen[600]),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child:IconButton(
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 15, top: 15),
+                    child: Chip(
+                        label: Text(
+                          "Auto Conhecimento",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12),
+                        ),
+                        backgroundColor: Colors.lightGreen[600]),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(10),
+                    child: questionIndex < conteudo.length - 1 ? IconButton(
                       icon: Icon(
                         Icons.arrow_forward_ios,
                       ),
@@ -216,15 +234,19 @@ Padding(
                           _rotationController.value = 0;
                           _rotationController.forward();
                         }
-                        _youtubePlayerController.pause();
+                        setState(() {
+                          if (_youtubePlayerController != null) {
+                            _youtubePlayerController = null;
+                          }
+                        });
 
                         _buttonAvancar();
                       },
-                    ),
+                    ) : Container(),
+                  ),
+                ],
               ),
-              ],),
-              
-              
+
               Wrap(children: [
                 Center(
                   child: RotationTransition(
@@ -251,90 +273,98 @@ Padding(
                   ),
                 ),
               ]),
-              conteudo[questionIndex].video != null ? Container(
-                margin: EdgeInsets.only(right: 20, left: 20),
-                height: 200,
-child: YoutubePlayerBuilder(
-                // onExitFullScreen: () {
-                //   // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
-                //   SystemChrome.setPreferredOrientations(
-                //       DeviceOrientation.values);
-                // },
-                player: YoutubePlayer(
-                  controller: _youtubePlayerController,
-                  showVideoProgressIndicator: true,
-                  progressIndicatorColor: Colors.red,
-                  topActions: <Widget>[
-                    const SizedBox(width: 8.0),
-                    Expanded(
-                      child: Text(
-                        _youtubePlayerController.metadata.title,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18.0,
+              (conteudo.length > 0 != null &&
+                      conteudo[questionIndex].video != null)
+                  ? Container(
+                      margin: EdgeInsets.only(right: 20, left: 20),
+                      height: 200,
+                      child: YoutubePlayerBuilder(
+                        // onExitFullScreen: () {
+                        //   // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
+                        //   SystemChrome.setPreferredOrientations(
+                        //       DeviceOrientation.values);
+                        // },
+                        player: YoutubePlayer(
+                          controller: _youtubePlayerController,
+                          showVideoProgressIndicator: true,
+                          progressIndicatorColor: Colors.red,
+                          topActions: <Widget>[
+                            const SizedBox(width: 8.0),
+                            Expanded(
+                              child: Text(
+                                _youtubePlayerController.metadata.title,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.0,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                          onReady: () {
+                            _isPlayerReady = true;
+                          },
                         ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                        builder: (context, player) => Scaffold(
+                          key: _scaffoldKey,
+                          body: ListView(
+                            children: [
+                              player,
+                            ],
+                          ),
+                        ),
+                      ))
+                  : Container(),
+              conteudo[questionIndex].img != null
+                  ? Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30)),
+                      margin: EdgeInsets.only(right: 30, left: 30),
+                      child: Image(
+                        image: AssetImage('assets/divertidamente.png'),
                       ),
-                    ),
-                    // IconButton(
-                    //   icon: const Icon(
-                    //     Icons.settings,
-                    //     color: Colors.white,
-                    //     size: 25.0,
-                    //   ),
-                    //   onPressed: () {
-                    //     print('Settings Tapped!');
-                    //   },
-                    // ),
-                  ],
-                  onReady: () {
-                    _isPlayerReady = true;
-                  },
-                ),
-                builder: (context, player) => Scaffold(
-                  key: _scaffoldKey,
-                  body: ListView(
-                    children: [
-                      player,
-                    ],
-                  ),
-                ),
-              )
-              ) : Container(),
-              conteudo[questionIndex].img != null ? Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-                margin: EdgeInsets.only(right:30, left: 30),
-                child: Image(image: AssetImage('assets/divertidamente.png'),),
-              ) : Container(),
+                    )
+                  : Container(),
               conteudo[questionIndex].flPergunta == true &&
-              conteudo[questionIndex].respostaText == false ?
-              Container(
-                child: Column(children: [
-                  RaisedButton(
-                    color: respostas[questionIndex] == "sim"
-                        ? Colors.green
-                        : Colors.white,
-                    child: Text("Sim", style: TextStyle(color: respostas[questionIndex] == "sim" ? Colors.white : Colors.black),),
-                    onPressed: () {
-                      setState((){
-                      respostas[questionIndex] = "sim";
-                      });
-                    },
-                  ),
-                  RaisedButton(
-                    color: respostas[questionIndex] == "nao"
-                        ? Colors.red
-                        : Colors.white,
-                    child: Text("Não", style: TextStyle(color: respostas[questionIndex] == "nao" ? Colors.white : Colors.black)),
-                    onPressed: () {
-                      setState((){
-                      respostas[questionIndex] = "nao";
-                      });
-                    },
-                  ),
-                ]),
-              ) : Container(),
+                      conteudo[questionIndex].respostaText == false
+                  ? Container(
+                      child: Column(children: [
+                        RaisedButton(
+                          color: respostas[questionIndex] == "sim"
+                              ? Colors.green
+                              : Colors.white,
+                          child: Text(
+                            "Sim",
+                            style: TextStyle(
+                                color: respostas[questionIndex] == "sim"
+                                    ? Colors.white
+                                    : Colors.black),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              respostas[questionIndex] = "sim";
+                            });
+                          },
+                        ),
+                        RaisedButton(
+                          color: respostas[questionIndex] == "nao"
+                              ? Colors.red
+                              : Colors.white,
+                          child: Text("Não",
+                              style: TextStyle(
+                                  color: respostas[questionIndex] == "nao"
+                                      ? Colors.white
+                                      : Colors.black)),
+                          onPressed: () {
+                            setState(() {
+                              respostas[questionIndex] = "nao";
+                            });
+                          },
+                        ),
+                      ]),
+                    )
+                  : Container(),
               conteudo[questionIndex].respostaText
                   ? Container(
                       margin: EdgeInsets.all(40),

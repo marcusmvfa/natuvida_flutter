@@ -2,7 +2,7 @@ class PostagemModel {
   final String texto;
   final bool flPergunta;
   final bool respostaText;
-  final String video;
+  String video;
   final String img;
   
   PostagemModel({this.texto, this.flPergunta, this.respostaText, this.video, this.img});
