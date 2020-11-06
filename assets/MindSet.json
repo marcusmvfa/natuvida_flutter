@@ -1,0 +1,54 @@
+  [
+    {
+      "texto": "MINDSET\n\nVídeo sobre o MindSet Fixo e o MindSet de Crescimento",
+      "flPergunta": false,
+      "respostaText": false,
+      "video": "https://youtu.be/VqipaMrttps"
+    },
+    {
+      "texto": "Mindset fixo:\n'Meu amigo não me cumprimentou porque não gosta mais de mim…'\nMindset de crescimento:\n'Vou perguntar para meu amigo se aconteceu alguma coisa com ele?'",
+      "flPergunta": false,
+      "respostaText": false
+    },
+    {
+      "texto": "Qual MINDSET você se identifica?",
+      "flPergunta": true,
+      "respostaText": false,
+      "multipla": [
+        "1- Você é capaz de mudar substancialmente seu nível de inteligência.","2- Qualquer que seja seu nível de inteligência, sempre é possível modificá-lo bastante.","3- Você é capaz de aprender coisas novas, mas, na verdade, não pode mudar seu nível de inteligência.","4- Sua inteligência é algo muito pessoal, e você não pode transformá-la demais."
+      ]
+    },
+    {
+      "texto": "As afirmações 1 e 2 referem-se ao MINDSET DE CRESCIMENTO. Já as afirmações 3 e 4 refletem sobre o MINDSET FIXO.\nPode acontecer de suas respostas serem mista, porém normalmente inclina para um grupo.\n\nEste é o grupo que gostaria de pertencer?",
+      "flPergunta": false,
+      "respostaText": false
+    },
+    {
+      "texto": "Em relação a suas aptidões, qualidades, personalidade e caráter, quais afirmações combinam mais com você?",
+      "flPergunta": true,
+      "respostaText": false,
+      "multipla": [
+        "1- Você é capaz de modificar os elementos básicos do tipo de pessoa que você é.","2- Você pode fazer as coisas de maneira diferente, mas a essência daquilo que você é não pode ser realmente modificado.","3- Independente do tipo de pessoa que você seja, sempre é possível modificá-lo, substancialmente.","4- Você é certo tipo de pessoa, e não há muito o que se possa fazer para mudar esse fato"
+        ]
+    },
+    {
+      "texto": "As afirmações 1 e 3 relatam o perfil de MINDSET CRESCIMENTO, já as afirmações 2 e 4 concluem um MINDSET FIXO.\n\nCom qual dos grupos você se identificou mais?\n\n- O MINDSET FIXO faz com que você se preocupe com a forma com que será avaliado.\n- O MINDSET DE CRESCIMENTO torna-o interessado (a) em seu aperfeiçoamento.",
+      "flPergunta": false,
+      "respostaText": false
+    },
+    {
+      "texto": "Como você se imagina daqui 5 anos?",
+      "flPergunta": true,
+      "respostaText": true
+    },
+    {
+      "texto": "O que deseja alcançar/realizar daqui 5 anos?",
+      "flPergunta": true,
+      "respostaText": true
+    },
+    {
+      "texto": "O que você faz hoje para conquistar o que deseja futuramente?",
+      "flPergunta": true,
+      "respostaText": true
+    }
+  ]

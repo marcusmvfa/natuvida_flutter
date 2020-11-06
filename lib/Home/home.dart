@@ -337,6 +337,146 @@ class _HomeState extends State<Home> {
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => Perguntas(argument: 'maslow')));
                         }),
+                        GestureDetector(
+                        child: Container(
+                          width: double.maxFinite,
+                          height: 200,
+                          margin: EdgeInsets.only(
+                              top: 10, bottom: 10, left: 25, right: 25),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black12),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey[100],
+                          ),
+                          child: Center(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Image(
+                                      fit: BoxFit.fitWidth,
+                                      image: AssetImage('assets/duvida.jpg'),
+                                      height: 110,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20),
+                                        child: Text(
+                                          "MindSet",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          right: 20,
+                                        ),
+                                        child: Chip(
+                                            label: Text(
+                                              "MindSet",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12),
+                                            ),
+                                            backgroundColor:
+                                                Colors.teal),
+                                      )
+                                    ],
+                                  ),
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 20, top: 10),
+                                      child: Text("12 de set. 2020",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle()))
+                                ]),
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Perguntas(argument: 'mindset')));
+                        }),
+                        GestureDetector(
+                        child: Container(
+                          width: double.maxFinite,
+                          height: 200,
+                          margin: EdgeInsets.only(
+                              top: 10, bottom: 10, left: 25, right: 25),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black12),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey[100],
+                          ),
+                          child: Center(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Image(
+                                      fit: BoxFit.fitWidth,
+                                      image: AssetImage('assets/duvida.jpg'),
+                                      height: 110,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20),
+                                        child: Text(
+                                          "DESAFIO",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          right: 20,
+                                        ),
+                                        child: Chip(
+                                            label: Text(
+                                              "Desafio",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12),
+                                            ),
+                                            backgroundColor:
+                                                Colors.teal),
+                                      )
+                                    ],
+                                  ),
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 20, top: 10),
+                                      child: Text("12 de set. 2020",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle()))
+                                ]),
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Perguntas(argument: 'desafio')));
+                        })
                   ],
                 ),
               ),

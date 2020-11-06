@@ -27,7 +27,12 @@
   "respostaText": false
 },
 {
-  "texto" : "CINCO LINGUAGENS DO AMOR\n\n\nE por falar em se conhecer melhor, você sabe qual é a forma que mais se sente amado?\n\nAtravés das cinco linguagens do amor, é possível reconhecermos qual é a nossa principal linguagem.\n\nCaso ainda não saiba, separamos um vídeo para te auxiliar nessa grande descoberta:",
+  "texto" : "CINCO LINGUAGENS DO AMOR\n\n\nE por falar em se conhecer melhor, você sabe qual é a forma que mais se sente amado?\n\nAtravés das cinco linguagens do amor, é possível reconhecermos qual é a nossa principal linguagem.",
+  "flPergunta" : false,
+  "respostaText": false
+},
+{
+  "texto" : "Caso ainda não saiba, separamos um vídeo para te auxiliar nessa grande descoberta:",
   "video" : "https://youtu.be/8RzFggd8Nc8",
   "flPergunta" : false,
   "respostaText": false

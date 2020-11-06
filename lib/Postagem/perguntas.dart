@@ -48,6 +48,8 @@ class _PerguntasState extends State<Perguntas>
   }
 
   void _buttonAvancar() {
+    if(_youtubePlayerController != null)
+      _youtubePlayerController.pause();
     if (questionIndex < conteudo.length - 1) {
       setState(() {
         this.respostas[questionIndex] = respostaController.text;
@@ -117,11 +119,32 @@ class _PerguntasState extends State<Perguntas>
         jsonString =
             await rootBundle.loadString("assets/Piramide_de_Maslow.json");
         break;
+
+      case 'mindset':
+        jsonString =
+            await rootBundle.loadString("assets/MindSet.json");
+        break;
+
+      case 'desafio':
+        jsonString =
+            await rootBundle.loadString("assets/DESAFIO.json");
+        break;
     }
     final jsonResponse = jsonDecode(jsonString) as List;
     conteudo = jsonResponse.map((e) => PostagemModel.fromJson(e)).toList();
     // .map((data) => PostagemModel.fromJson(data))
     // .toList();
+    if (conteudo[questionIndex].video != null) {
+          conteudo[questionIndex].video =
+              YoutubePlayer.convertUrlToId(conteudo[questionIndex].video);
+          _youtubePlayerController = YoutubePlayerController(
+            initialVideoId: conteudo[questionIndex].video,
+            flags: YoutubePlayerFlags(
+              autoPlay: true,
+              mute: false,
+            ),
+          )..reset();
+        }
 
     setState(() {
       questionText = conteudo[0].texto;
@@ -166,6 +189,7 @@ class _PerguntasState extends State<Perguntas>
   @override
   void dispose() {
     _rotationController.dispose();
+    if(_youtubePlayerController != null)
     _youtubePlayerController.dispose();
     super.dispose();
   }
@@ -273,11 +297,11 @@ class _PerguntasState extends State<Perguntas>
                   ),
                 ),
               ]),
-              (conteudo.length > 0 != null &&
+              (conteudo.length > 0 && conteudo[questionIndex] != null &&
                       conteudo[questionIndex].video != null)
                   ? Container(
                       margin: EdgeInsets.only(right: 20, left: 20),
-                      height: 200,
+                      height: 300,
                       child: YoutubePlayerBuilder(
                         // onExitFullScreen: () {
                         //   // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
@@ -291,8 +315,8 @@ class _PerguntasState extends State<Perguntas>
                           topActions: <Widget>[
                             const SizedBox(width: 8.0),
                             Expanded(
-                              child: Text(
-                                _youtubePlayerController.metadata.title,
+                              child: Text(_youtubePlayerController != null ?
+                                _youtubePlayerController.metadata.title : "",
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 18.0,
@@ -316,7 +340,7 @@ class _PerguntasState extends State<Perguntas>
                         ),
                       ))
                   : Container(),
-              conteudo[questionIndex].img != null
+              (conteudo.length > 0 && conteudo[questionIndex] != null && conteudo[questionIndex].img != null)
                   ? Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30)),
