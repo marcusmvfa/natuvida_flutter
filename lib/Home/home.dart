@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:natuvida_flutter/Postagem/perguntas.dart';
-import 'package:natuvida_flutter/Postagem/postagem.dart';
+import 'package:natuvida_flutter/Services/requests.dart' as Requests;
 
 class Home extends StatefulWidget {
   @override
@@ -8,6 +8,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    Requests.getUsers();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +41,7 @@ class _HomeState extends State<Home> {
                         width: 170,
                         margin: EdgeInsets.only(left: 10),
                         child: Text(
-                          "Marcus Vinícius da Fonseca Antunes",
+                          "Nome do Usuário",
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 12),
                         ),
@@ -45,14 +50,14 @@ class _HomeState extends State<Home> {
                         width: 170,
                         margin: EdgeInsets.only(left: 10),
                         child: Text(
-                          "marcuspa3@gmail.com",
+                          "email@gmail.com",
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 12),
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 10),
-                        child: Text("(45) 99844-9756",
+                        child: Text("(45) 99999-9999",
                         style: TextStyle(fontSize: 12),),
                       ),
                     ])
@@ -461,7 +466,7 @@ class _HomeState extends State<Home> {
                                                   fontSize: 12),
                                             ),
                                             backgroundColor:
-                                                Colors.teal),
+                                                Colors.orange),
                                       )
                                     ],
                                   ),

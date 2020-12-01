@@ -36,12 +36,6 @@ class _PerguntasState extends State<Perguntas>
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   void _geraPerguntas() {
-    this.perguntas.add("O que te faz bem?");
-    this.perguntas.add("O que te motiva?");
-    this.perguntas.add("O que você mais gosta de fazer?");
-    this.perguntas.add("O que te torna forte?");
-    this.perguntas.add("O que te enfraquece?");
-    this.perguntas.add("O que você precisa melhorar?");
     this.conteudo.forEach((element) {
       this.respostas.add("");
     });
@@ -49,7 +43,7 @@ class _PerguntasState extends State<Perguntas>
 
   void _buttonAvancar() {
     if(_youtubePlayerController != null)
-      _youtubePlayerController.pause();
+      _youtubePlayerController = null;
     if (questionIndex < conteudo.length - 1) {
       setState(() {
         this.respostas[questionIndex] = respostaController.text;
@@ -432,7 +426,7 @@ class _PerguntasState extends State<Perguntas>
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                         onPressed: () {
-                          Navigator.of(context).pushNamed('/finalizar');
+                          Navigator.of(context).pushReplacementNamed('/finalizar');
                         },
                       ),
               ),

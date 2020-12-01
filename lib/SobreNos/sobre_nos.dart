@@ -62,7 +62,7 @@ class _SobreNosState extends State<SobreNos> {
                     margin: EdgeInsets.all(15),
                     width: 200,
                     child: Text(
-                      "Acadêmic do curso de Ciência da Computação - 8º Período",
+                      "Acadêmico do curso de Ciência da Computação - 8º Período",
                       style: TextStyle(fontSize: 16),
                     ),
                   )
@@ -84,7 +84,7 @@ class _SobreNosState extends State<SobreNos> {
                     margin: EdgeInsets.all(15),
                     width: 200,
                     child: Text(
-                      "Acadêmica do curso de Psicologia - 8º Período",
+                      "Acadêmica do curso de Psicologia - 10º Período",
                       style: TextStyle(fontSize: 16),
                     ),
                   )
@@ -106,7 +106,7 @@ class _SobreNosState extends State<SobreNos> {
                     margin: EdgeInsets.all(15),
                     width: 200,
                     child: Text(
-                      "Acadêmica do curso de Psicologia - 8º Período",
+                      "Acadêmica do curso de Psicologia - 10º Período",
                       style: TextStyle(fontSize: 16),
                     ),
                   )

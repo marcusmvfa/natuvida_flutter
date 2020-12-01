@@ -15,7 +15,10 @@
       "flPergunta": true,
       "respostaText": false,
       "multipla": [
-        "1- Você é capaz de mudar substancialmente seu nível de inteligência.","2- Qualquer que seja seu nível de inteligência, sempre é possível modificá-lo bastante.","3- Você é capaz de aprender coisas novas, mas, na verdade, não pode mudar seu nível de inteligência.","4- Sua inteligência é algo muito pessoal, e você não pode transformá-la demais."
+        "1- Você é capaz de mudar substancialmente seu nível de inteligência.",
+        "2- Qualquer que seja seu nível de inteligência, sempre é possível modificá-lo bastante.",
+        "3- Você é capaz de aprender coisas novas, mas, na verdade, não pode mudar seu nível de inteligência.",
+        "4- Sua inteligência é algo muito pessoal, e você não pode transformá-la demais."
       ]
     },
     {
@@ -28,7 +31,10 @@
       "flPergunta": true,
       "respostaText": false,
       "multipla": [
-        "1- Você é capaz de modificar os elementos básicos do tipo de pessoa que você é.","2- Você pode fazer as coisas de maneira diferente, mas a essência daquilo que você é não pode ser realmente modificado.","3- Independente do tipo de pessoa que você seja, sempre é possível modificá-lo, substancialmente.","4- Você é certo tipo de pessoa, e não há muito o que se possa fazer para mudar esse fato"
+        "1- Você é capaz de modificar os elementos básicos do tipo de pessoa que você é.",
+        "2- Você pode fazer as coisas de maneira diferente, mas a essência daquilo que você é não pode ser realmente modificado.",
+        "3- Independente do tipo de pessoa que você seja, sempre é possível modificá-lo, substancialmente.",
+        "4- Você é certo tipo de pessoa, e não há muito o que se possa fazer para mudar esse fato"
         ]
     },
     {
