@@ -42,8 +42,7 @@ class _PerguntasState extends State<Perguntas>
   }
 
   void _buttonAvancar() {
-    if(_youtubePlayerController != null)
-      _youtubePlayerController = null;
+    if (_youtubePlayerController != null) _youtubePlayerController = null;
     if (questionIndex < conteudo.length - 1) {
       setState(() {
         this.respostas[questionIndex] = respostaController.text;
@@ -115,13 +114,11 @@ class _PerguntasState extends State<Perguntas>
         break;
 
       case 'mindset':
-        jsonString =
-            await rootBundle.loadString("assets/MindSet.json");
+        jsonString = await rootBundle.loadString("assets/MindSet.json");
         break;
 
       case 'desafio':
-        jsonString =
-            await rootBundle.loadString("assets/DESAFIO.json");
+        jsonString = await rootBundle.loadString("assets/DESAFIO.json");
         break;
     }
     final jsonResponse = jsonDecode(jsonString) as List;
@@ -129,16 +126,16 @@ class _PerguntasState extends State<Perguntas>
     // .map((data) => PostagemModel.fromJson(data))
     // .toList();
     if (conteudo[questionIndex].video != null) {
-          conteudo[questionIndex].video =
-              YoutubePlayer.convertUrlToId(conteudo[questionIndex].video);
-          _youtubePlayerController = YoutubePlayerController(
-            initialVideoId: conteudo[questionIndex].video,
-            flags: YoutubePlayerFlags(
-              autoPlay: true,
-              mute: false,
-            ),
-          )..reset();
-        }
+      conteudo[questionIndex].video =
+          YoutubePlayer.convertUrlToId(conteudo[questionIndex].video);
+      _youtubePlayerController = YoutubePlayerController(
+        initialVideoId: conteudo[questionIndex].video,
+        flags: YoutubePlayerFlags(
+          autoPlay: true,
+          mute: false,
+        ),
+      )..reset();
+    }
 
     setState(() {
       questionText = conteudo[0].texto;
@@ -167,6 +164,84 @@ class _PerguntasState extends State<Perguntas>
     );
   }
 
+  Widget factoryEscolhas() {
+    if (conteudo.length > 0) {
+      if (conteudo[questionIndex].flPergunta == true &&
+          conteudo[questionIndex].respostaText == false &&
+          conteudo[questionIndex].multipla.length == null) {
+        return Container(
+          child: Column(children: [
+            RaisedButton(
+              color: respostas[questionIndex] == "sim"
+                  ? Colors.green
+                  : Colors.white,
+              child: Text(
+                "Sim",
+                style: TextStyle(
+                    color: respostas[questionIndex] == "sim"
+                        ? Colors.white
+                        : Colors.black),
+              ),
+              onPressed: () {
+                setState(() {
+                  respostas[questionIndex] = "sim";
+                });
+              },
+            ),
+            RaisedButton(
+              color:
+                  respostas[questionIndex] == "nao" ? Colors.red : Colors.white,
+              child: Text("Não",
+                  style: TextStyle(
+                      color: respostas[questionIndex] == "nao"
+                          ? Colors.white
+                          : Colors.black)),
+              onPressed: () {
+                setState(() {
+                  respostas[questionIndex] = "nao";
+                });
+              },
+            ),
+          ]),
+        );
+      } 
+      else if (conteudo[questionIndex].flPergunta == true &&
+          conteudo[questionIndex].respostaText == false &&
+          conteudo[questionIndex].multipla != null && 
+          conteudo[questionIndex].multipla.length > 0) {
+        List escolhas = conteudo[questionIndex].multipla;
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: escolhas.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              child: Container(
+                width: 200,
+                // height: 60,
+                padding: EdgeInsets.all(10),
+                margin:
+                    EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black12),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(blurRadius: 5,offset: Offset(0,2), spreadRadius: 1, color: Colors.black12)
+                  ]
+                ),
+                child: Center(
+                  child: Text(escolhas[index].toString()),
+                ),
+              ),
+            );
+          },
+        );
+      } else 
+      return Container();
+    } else
+    return Container();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -183,8 +258,7 @@ class _PerguntasState extends State<Perguntas>
   @override
   void dispose() {
     _rotationController.dispose();
-    if(_youtubePlayerController != null)
-    _youtubePlayerController.dispose();
+    if (_youtubePlayerController != null) _youtubePlayerController.dispose();
     super.dispose();
   }
 
@@ -217,17 +291,19 @@ class _PerguntasState extends State<Perguntas>
                 children: [
                   Padding(
                     padding: EdgeInsets.all(10),
-                    child: questionIndex > 0 ? IconButton(
-                      icon: Icon(
-                        Icons.arrow_back_ios,
-                      ),
-                      onPressed: () {
-                        if (_youtubePlayerController != null) {
-                          _youtubePlayerController = null;
-                        }
-                        _buttonRetrocerder();
-                      },
-                    ) : Container(),
+                    child: questionIndex > 0
+                        ? IconButton(
+                            icon: Icon(
+                              Icons.arrow_back_ios,
+                            ),
+                            onPressed: () {
+                              if (_youtubePlayerController != null) {
+                                _youtubePlayerController = null;
+                              }
+                              _buttonRetrocerder();
+                            },
+                          )
+                        : Container(),
                   ),
                   Padding(
                     padding: EdgeInsets.only(bottom: 15, top: 15),
@@ -243,24 +319,26 @@ class _PerguntasState extends State<Perguntas>
                   ),
                   Padding(
                     padding: EdgeInsets.all(10),
-                    child: questionIndex < conteudo.length - 1 ? IconButton(
-                      icon: Icon(
-                        Icons.arrow_forward_ios,
-                      ),
-                      onPressed: () {
-                        if (_rotationController.isCompleted) {
-                          _rotationController.value = 0;
-                          _rotationController.forward();
-                        }
-                        setState(() {
-                          if (_youtubePlayerController != null) {
-                            _youtubePlayerController = null;
-                          }
-                        });
+                    child: questionIndex < conteudo.length - 1
+                        ? IconButton(
+                            icon: Icon(
+                              Icons.arrow_forward_ios,
+                            ),
+                            onPressed: () {
+                              if (_rotationController.isCompleted) {
+                                _rotationController.value = 0;
+                                _rotationController.forward();
+                              }
+                              setState(() {
+                                if (_youtubePlayerController != null) {
+                                  _youtubePlayerController = null;
+                                }
+                              });
 
-                        _buttonAvancar();
-                      },
-                    ) : Container(),
+                              _buttonAvancar();
+                            },
+                          )
+                        : Container(),
                   ),
                 ],
               ),
@@ -274,7 +352,7 @@ class _PerguntasState extends State<Perguntas>
                       padding: EdgeInsets.all(15),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey),
+                          border: Border.all(color: Colors.black12),
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
@@ -291,7 +369,8 @@ class _PerguntasState extends State<Perguntas>
                   ),
                 ),
               ]),
-              (conteudo.length > 0 && conteudo[questionIndex] != null &&
+              (conteudo.length > 0 &&
+                      conteudo[questionIndex] != null &&
                       conteudo[questionIndex].video != null)
                   ? Container(
                       margin: EdgeInsets.only(right: 20, left: 20),
@@ -309,8 +388,10 @@ class _PerguntasState extends State<Perguntas>
                           topActions: <Widget>[
                             const SizedBox(width: 8.0),
                             Expanded(
-                              child: Text(_youtubePlayerController != null ?
-                                _youtubePlayerController.metadata.title : "",
+                              child: Text(
+                                _youtubePlayerController != null
+                                    ? _youtubePlayerController.metadata.title
+                                    : "",
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 18.0,
@@ -334,7 +415,9 @@ class _PerguntasState extends State<Perguntas>
                         ),
                       ))
                   : Container(),
-              (conteudo.length > 0 && conteudo[questionIndex] != null && conteudo[questionIndex].img != null)
+              (conteudo.length > 0 &&
+                      conteudo[questionIndex] != null &&
+                      conteudo[questionIndex].img != null)
                   ? Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30)),
@@ -344,46 +427,10 @@ class _PerguntasState extends State<Perguntas>
                       ),
                     )
                   : Container(),
-              conteudo[questionIndex].flPergunta == true &&
-                      conteudo[questionIndex].respostaText == false
-                  ? Container(
-                      child: Column(children: [
-                        RaisedButton(
-                          color: respostas[questionIndex] == "sim"
-                              ? Colors.green
-                              : Colors.white,
-                          child: Text(
-                            "Sim",
-                            style: TextStyle(
-                                color: respostas[questionIndex] == "sim"
-                                    ? Colors.white
-                                    : Colors.black),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              respostas[questionIndex] = "sim";
-                            });
-                          },
-                        ),
-                        RaisedButton(
-                          color: respostas[questionIndex] == "nao"
-                              ? Colors.red
-                              : Colors.white,
-                          child: Text("Não",
-                              style: TextStyle(
-                                  color: respostas[questionIndex] == "nao"
-                                      ? Colors.white
-                                      : Colors.black)),
-                          onPressed: () {
-                            setState(() {
-                              respostas[questionIndex] = "nao";
-                            });
-                          },
-                        ),
-                      ]),
-                    )
-                  : Container(),
-              conteudo[questionIndex].respostaText
+              factoryEscolhas(),
+              (conteudo.length > 0 
+              && conteudo[questionIndex] != null
+              && conteudo[questionIndex].respostaText)
                   ? Container(
                       margin: EdgeInsets.all(40),
                       child: TextField(
@@ -426,7 +473,8 @@ class _PerguntasState extends State<Perguntas>
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                         onPressed: () {
-                          Navigator.of(context).pushReplacementNamed('/finalizar');
+                          Navigator.of(context)
+                              .pushReplacementNamed('/finalizar');
                         },
                       ),
               ),
