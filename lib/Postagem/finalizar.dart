@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Finalizar extends StatefulWidget {
+  final String argument;
+  const Finalizar({Key key, this.argument}) : super(key: key);
   @override
   _FinalizarState createState() => _FinalizarState();
 }
@@ -48,8 +50,8 @@ class _FinalizarState extends State<Finalizar> {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   child: Image(
                     fit: BoxFit.fill,
-                    image: AssetImage('assets/duvida.jpg'),
-                    height: 110,
+                    image: AssetImage('assets/imgPosts/' + widget.argument),
+                    // height: 110,
                   ),
                 ),
               ),

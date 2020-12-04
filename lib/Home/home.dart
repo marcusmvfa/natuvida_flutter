@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: AssetImage('assets/profile_image.png'),
+                      image: AssetImage('assets/perfilMarcus.jpg'),
                     ),
                   ),
                 ),
@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
                         width: 170,
                         margin: EdgeInsets.only(left: 10),
                         child: Text(
-                          "Nome do Usuário",
+                          "Marcus Vinicius",
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 12),
                         ),
@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
                         width: 170,
                         margin: EdgeInsets.only(left: 10),
                         child: Text(
-                          "email@gmail.com",
+                          "marcuspa3@gmail.com",
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 12),
                         ),
@@ -139,7 +139,15 @@ class _HomeState extends State<Home> {
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black12),
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey[100],
+                            color: Colors.white,
+                          boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        spreadRadius: 2,
+        blurRadius: 3,
+        offset: Offset(0, 3), // changes position of shadow
+      ),
+    ],
                           ),
                           child: Center(
                             child: Column(
@@ -154,7 +162,7 @@ class _HomeState extends State<Home> {
                                     ),
                                     child: Image(
                                       fit: BoxFit.fitWidth,
-                                      image: AssetImage('assets/duvida.jpg'),
+                                      image: AssetImage('assets/imgPosts/AUTOCONHECIMENTO.jpg'),
                                       height: 110,
                                     ),
                                   ),
@@ -210,7 +218,15 @@ class _HomeState extends State<Home> {
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black12),
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey[100],
+                            color: Colors.white,
+                            boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        spreadRadius: 2,
+        blurRadius: 3,
+        offset: Offset(0, 3), // changes position of shadow
+      ),
+    ],
                           ),
                           child: Center(
                             child: Column(
@@ -225,7 +241,7 @@ class _HomeState extends State<Home> {
                                     ),
                                     child: Image(
                                       fit: BoxFit.fitWidth,
-                                      image: AssetImage('assets/duvida.jpg'),
+                                      image: AssetImage('assets/imgPosts/EMOCOES.jpg'),
                                       height: 110,
                                     ),
                                   ),
@@ -263,14 +279,14 @@ class _HomeState extends State<Home> {
                                   Padding(
                                       padding:
                                           EdgeInsets.only(left: 20, top: 10),
-                                      child: Text("12 de set. 2020",
+                                      child: Text("20 de set. 2020",
                                           textAlign: TextAlign.left,
                                           style: TextStyle()))
                                 ]),
                           ),
                         ),
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Perguntas(argument: 'emocoes')));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Perguntas(argument: 'emocoes', image: 'EMOCOES.jpg')));
                         }),
                     GestureDetector(
                         child: Container(
@@ -281,7 +297,15 @@ class _HomeState extends State<Home> {
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black12),
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey[100],
+                            color: Colors.white,
+                            boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        spreadRadius: 2,
+        blurRadius: 3,
+        offset: Offset(0, 3), // changes position of shadow
+      ),
+    ],
                           ),
                           child: Center(
                             child: Column(
@@ -296,7 +320,7 @@ class _HomeState extends State<Home> {
                                     ),
                                     child: Image(
                                       fit: BoxFit.fitWidth,
-                                      image: AssetImage('assets/duvida.jpg'),
+                                      image: AssetImage('assets/imgPosts/maslow.jpg'),
                                       height: 110,
                                     ),
                                   ),
@@ -333,7 +357,7 @@ class _HomeState extends State<Home> {
                                   Padding(
                                       padding:
                                           EdgeInsets.only(left: 20, top: 10),
-                                      child: Text("12 de set. 2020",
+                                      child: Text("27 de set. 2020",
                                           textAlign: TextAlign.left,
                                           style: TextStyle()))
                                 ]),
@@ -351,7 +375,15 @@ class _HomeState extends State<Home> {
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black12),
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey[100],
+                            color: Colors.white,
+                            boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        spreadRadius: 2,
+        blurRadius: 3,
+        offset: Offset(0, 3), // changes position of shadow
+      ),
+    ],
                           ),
                           child: Center(
                             child: Column(
@@ -366,7 +398,7 @@ class _HomeState extends State<Home> {
                                     ),
                                     child: Image(
                                       fit: BoxFit.fitWidth,
-                                      image: AssetImage('assets/duvida.jpg'),
+                                      image: AssetImage('assets/imgPosts/MINDSET.jpg'),
                                       height: 110,
                                     ),
                                   ),
@@ -403,7 +435,7 @@ class _HomeState extends State<Home> {
                                   Padding(
                                       padding:
                                           EdgeInsets.only(left: 20, top: 10),
-                                      child: Text("12 de set. 2020",
+                                      child: Text("01 de nov. 2020",
                                           textAlign: TextAlign.left,
                                           style: TextStyle()))
                                 ]),
@@ -421,7 +453,15 @@ class _HomeState extends State<Home> {
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black12),
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey[100],
+                            color: Colors.white,
+                            boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        spreadRadius: 2,
+        blurRadius: 3,
+        offset: Offset(0, 3), // changes position of shadow
+      ),
+    ],
                           ),
                           child: Center(
                             child: Column(
@@ -436,7 +476,7 @@ class _HomeState extends State<Home> {
                                     ),
                                     child: Image(
                                       fit: BoxFit.fitWidth,
-                                      image: AssetImage('assets/duvida.jpg'),
+                                      image: AssetImage('assets/imgPosts/CEREBRO.jpg'),
                                       height: 110,
                                     ),
                                   ),
@@ -473,7 +513,7 @@ class _HomeState extends State<Home> {
                                   Padding(
                                       padding:
                                           EdgeInsets.only(left: 20, top: 10),
-                                      child: Text("12 de set. 2020",
+                                      child: Text("14 de nov. 2020",
                                           textAlign: TextAlign.left,
                                           style: TextStyle()))
                                 ]),

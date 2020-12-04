@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:natuvida_flutter/model/postagemModel.dart';
+import 'package:natuvida_flutter/Postagem/Finalizar.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class Perguntas extends StatefulWidget {
   final String argument;
+  final String image;
 
-  const Perguntas({Key key, this.argument}) : super(key: key);
+  const Perguntas({Key key, this.argument, this.image}) : super(key: key);
 
   @override
   _PerguntasState createState() => _PerguntasState();
@@ -474,7 +476,9 @@ class _PerguntasState extends State<Perguntas>
                         ),
                         onPressed: () {
                           Navigator.of(context)
-                              .pushReplacementNamed('/finalizar');
+                              .pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) => Finalizar(argument: widget.image),),);
                         },
                       ),
               ),
