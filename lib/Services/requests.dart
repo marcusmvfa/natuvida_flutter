@@ -8,3 +8,13 @@ getUsers(){
     print(error);
   });
 }
+dynamic getPostagens() async {
+  var posts = await http.get("https://secure-temple-09752.herokuapp.com/postagens").then((response) {
+    if(response.statusCode == 200){
+      return response.body;
+    }
+  }).catchError((error){
+    print(error);
+  });
+  return posts;
+}

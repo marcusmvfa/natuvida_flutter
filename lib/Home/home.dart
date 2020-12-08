@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:natuvida_flutter/Postagem/perguntas.dart';
 import 'package:natuvida_flutter/Services/requests.dart' as Requests;
+import 'package:natuvida_flutter/model/postagemDetalheModel.dart';
+import 'package:natuvida_flutter/model/postagemModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -8,9 +13,43 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  SharedPreferences prefs;
+  String nome = "";
+  String email = "";
+  List<PostagemDetalheModel> listPostagens = [];
+
+_getPostagens() async {
+  var a = await Requests.getPostagens();
+  List dec = jsonDecode(a);
+  List<PostagemModel> listPostagens = [];
+  List<PostagemDetalheModel> listDetalhesPostagens = [];
+  dec.forEach((element) {
+    var post = PostagemModel.fromJson(element);
+    element["postagemDetalhes"].forEach((el) {
+      var obj = PostagemDetalheModel.fromJson(el);
+      listDetalhesPostagens.add(obj);
+    });
+    post.detalhesPostagens = listDetalhesPostagens;
+    listPostagens.add(post);
+    // print(obj);
+  });
+  print(dec);
+}
+  _instantiatePrefs() async {
+    await SharedPreferences.getInstance().then((value) {
+      prefs = value;
+      setState(() {
+        nome = prefs.getString("nomeCompleto");
+        email = prefs.getString("email");
+      });
+    });
+
+  }
   @override
   void initState() {
     Requests.getUsers();
+    _getPostagens();
+    _instantiatePrefs();
     super.initState();
   }
   @override
@@ -41,7 +80,7 @@ class _HomeState extends State<Home> {
                         width: 170,
                         margin: EdgeInsets.only(left: 10),
                         child: Text(
-                          "Marcus Vinicius",
+                          nome,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 12),
                         ),
@@ -50,7 +89,7 @@ class _HomeState extends State<Home> {
                         width: 170,
                         margin: EdgeInsets.only(left: 10),
                         child: Text(
-                          "marcuspa3@gmail.com",
+                          email,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 12),
                         ),

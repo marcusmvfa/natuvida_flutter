@@ -1,21 +1,19 @@
+import 'package:natuvida_flutter/model/postagemDetalheModel.dart';
+
 class PostagemModel {
-  final String texto;
-  final bool flPergunta;
-  final bool respostaText;
-  String video;
-  final String img;
-  final List multipla;
+  final String id;
+  final String title;
+  final String imgPostagem;
+  List<PostagemDetalheModel> detalhesPostagens;
   
-  PostagemModel({this.texto, this.flPergunta, this.respostaText, this.video, this.img, this.multipla});
+  PostagemModel({this.id, this.title, this.imgPostagem, this.detalhesPostagens});
 
   factory PostagemModel.fromJson(Map<String, dynamic> json) {
     return new PostagemModel(
-      texto: json['texto'] as String,
-      flPergunta: json['flPergunta'] as bool,
-      respostaText: json['respostaText'] as bool,
-      video: json['video'] as String,
-      img: json['img'] as String,
-      multipla: json['multipla'] as List
+      id: json['_id'] as String,
+      title: json['title'] as String,
+      imgPostagem: json['imgPostagem'] as String,
+      detalhesPostagens: json['detalhesPostagens'] as List<PostagemDetalheModel>,
     );
   }
 }

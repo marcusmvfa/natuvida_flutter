@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:natuvida_flutter/model/postagemModel.dart';
+import 'package:natuvida_flutter/model/postagemDetalheModel.dart';
 import 'package:natuvida_flutter/Postagem/Finalizar.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -25,7 +25,7 @@ class _PerguntasState extends State<Perguntas>
   final respostaController = TextEditingController();
   AnimationController _rotationController;
   Animation rotation;
-  List<PostagemModel> conteudo = new List<PostagemModel>();
+  List<PostagemDetalheModel> conteudo = new List<PostagemDetalheModel>();
 
   PlayerState _playerState;
   YoutubeMetaData _videoMetaData;
@@ -124,7 +124,7 @@ class _PerguntasState extends State<Perguntas>
         break;
     }
     final jsonResponse = jsonDecode(jsonString) as List;
-    conteudo = jsonResponse.map((e) => PostagemModel.fromJson(e)).toList();
+    conteudo = jsonResponse.map((e) => PostagemDetalheModel.fromJson(e)).toList();
     // .map((data) => PostagemModel.fromJson(data))
     // .toList();
     if (conteudo[questionIndex].video != null) {
