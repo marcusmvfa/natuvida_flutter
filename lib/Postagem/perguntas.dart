@@ -9,8 +9,10 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 class Perguntas extends StatefulWidget {
   final String argument;
   final String image;
+  final dynamic postagemDetalhes;
 
-  const Perguntas({Key key, this.argument, this.image}) : super(key: key);
+  const Perguntas({Key key, this.argument, this.image, this.postagemDetalhes})
+      : super(key: key);
 
   @override
   _PerguntasState createState() => _PerguntasState();
@@ -55,7 +57,8 @@ class _PerguntasState extends State<Perguntas>
           respostaController.text = this.respostas[questionIndex];
         else
           respostaController.text = "";
-        if (conteudo[questionIndex].video != null) {
+        if (conteudo[questionIndex].video != null &&
+            conteudo[questionIndex].video != "") {
           conteudo[questionIndex].video =
               YoutubePlayer.convertUrlToId(conteudo[questionIndex].video);
           _youtubePlayerController = YoutubePlayerController(
@@ -76,7 +79,8 @@ class _PerguntasState extends State<Perguntas>
         questionIndex--;
         questionText = conteudo[questionIndex].texto;
         respostaController.text = this.respostas[questionIndex];
-        if (conteudo[questionIndex].video != null) {
+        if (conteudo[questionIndex].video != null &&
+            conteudo[questionIndex].video != "") {
           conteudo[questionIndex].video =
               YoutubePlayer.convertUrlToId(conteudo[questionIndex].video);
           _youtubePlayerController = YoutubePlayerController(
@@ -98,36 +102,40 @@ class _PerguntasState extends State<Perguntas>
 
   Future parseJson() async {
     // String jsonString = await _loadFromAsset();
-    String jsonString = widget.argument;
-    switch (widget.argument) {
-      case 'auto-conhecimento':
-        jsonString = await rootBundle
-            .loadString("assets/Auto-Conhecimento-Conteudo.json");
-        break;
+    var jsonString = widget.postagemDetalhes[0];
+    print(jsonString);
+    // String jsonString = widget.argument;
+    // switch (widget.argument) {
+    //   case 'auto-conhecimento':
+    //     jsonString = await rootBundle
+    //         .loadString("assets/Auto-Conhecimento-Conteudo.json");
+    //     break;
 
-      case 'emocoes':
-        jsonString = await rootBundle
-            .loadString("assets/Emocoes_e_cinco_linguagens_do_amor.json");
-        break;
+    //   case 'emocoes':
+    //     jsonString = await rootBundle
+    //         .loadString("assets/Emocoes_e_cinco_linguagens_do_amor.json");
+    //     break;
 
-      case 'maslow':
-        jsonString =
-            await rootBundle.loadString("assets/Piramide_de_Maslow.json");
-        break;
+    //   case 'maslow':
+    //     jsonString =
+    //         await rootBundle.loadString("assets/Piramide_de_Maslow.json");
+    //     break;
 
-      case 'mindset':
-        jsonString = await rootBundle.loadString("assets/MindSet.json");
-        break;
+    //   case 'mindset':
+    //     jsonString = await rootBundle.loadString("assets/MindSet.json");
+    //     break;
 
-      case 'desafio':
-        jsonString = await rootBundle.loadString("assets/DESAFIO.json");
-        break;
-    }
-    final jsonResponse = jsonDecode(jsonString) as List;
-    conteudo = jsonResponse.map((e) => PostagemDetalheModel.fromJson(e)).toList();
+    //   case 'desafio':
+    //     jsonString = await rootBundle.loadString("assets/DESAFIO.json");
+    //     break;
+    // }
+    // final jsonResponse = jsonDecode(jsonString) as List;
+    // conteudo = jsonResponse.map((e) => PostagemDetalheModel.fromJson(e)).toList();
+    conteudo = jsonString;
     // .map((data) => PostagemModel.fromJson(data))
     // .toList();
-    if (conteudo[questionIndex].video != null) {
+    if (conteudo[questionIndex].video != null &&
+        conteudo[questionIndex].video != "") {
       conteudo[questionIndex].video =
           YoutubePlayer.convertUrlToId(conteudo[questionIndex].video);
       _youtubePlayerController = YoutubePlayerController(
@@ -170,7 +178,7 @@ class _PerguntasState extends State<Perguntas>
     if (conteudo.length > 0) {
       if (conteudo[questionIndex].flPergunta == true &&
           conteudo[questionIndex].respostaText == false &&
-          conteudo[questionIndex].multipla.length == null) {
+          conteudo[questionIndex].multipla == null) {
         return Container(
           child: Column(children: [
             RaisedButton(
@@ -206,10 +214,9 @@ class _PerguntasState extends State<Perguntas>
             ),
           ]),
         );
-      } 
-      else if (conteudo[questionIndex].flPergunta == true &&
+      } else if (conteudo[questionIndex].flPergunta == true &&
           conteudo[questionIndex].respostaText == false &&
-          conteudo[questionIndex].multipla != null && 
+          conteudo[questionIndex].multipla != null &&
           conteudo[questionIndex].multipla.length > 0) {
         List escolhas = conteudo[questionIndex].multipla;
         return ListView.builder(
@@ -224,24 +231,41 @@ class _PerguntasState extends State<Perguntas>
                 margin:
                     EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black12),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(blurRadius: 5,offset: Offset(0,2), spreadRadius: 1, color: Colors.black12)
-                  ]
-                ),
+                    color: respostas[questionIndex] == escolhas[index]
+                        ? Colors.green
+                        : Colors.white,
+                    border: Border.all(color: Colors.black12),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 2,
+                          offset: Offset(0, 1),
+                          spreadRadius: 1,
+                          color: Colors.black12)
+                    ]),
                 child: Center(
-                  child: Text(escolhas[index].toString()),
+                  child: Text(
+                    escolhas[index].toString(),
+                    style: TextStyle(
+                      color: respostas[questionIndex] == escolhas[index]
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                  ),
                 ),
               ),
+              onTap: () {
+                setState(() {
+                  respostas[questionIndex] = escolhas[index].toString();
+                });
+              },
             );
           },
         );
-      } else 
-      return Container();
+      } else
+        return Container();
     } else
-    return Container();
+      return Container();
   }
 
   @override
@@ -311,7 +335,7 @@ class _PerguntasState extends State<Perguntas>
                     padding: EdgeInsets.only(bottom: 15, top: 15),
                     child: Chip(
                         label: Text(
-                          "Auto Conhecimento",
+                          widget.argument,
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -347,6 +371,23 @@ class _PerguntasState extends State<Perguntas>
 
               Wrap(children: [
                 Center(
+                  child: Padding(
+                    padding: conteudo[questionIndex] != null &&
+                              conteudo[questionIndex].title != null ? EdgeInsets.all(20): EdgeInsets.all(0),
+                    child: Text(
+                      conteudo[questionIndex] != null &&
+                              conteudo[questionIndex].title != null
+                          ? conteudo[questionIndex].title
+                          : "",
+                          textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
                   child: RotationTransition(
                     turns: rotation,
                     child: Container(
@@ -373,7 +414,8 @@ class _PerguntasState extends State<Perguntas>
               ]),
               (conteudo.length > 0 &&
                       conteudo[questionIndex] != null &&
-                      conteudo[questionIndex].video != null)
+                      conteudo[questionIndex].video != null &&
+                      conteudo[questionIndex].video != "")
                   ? Container(
                       margin: EdgeInsets.only(right: 20, left: 20),
                       height: 300,
@@ -430,9 +472,9 @@ class _PerguntasState extends State<Perguntas>
                     )
                   : Container(),
               factoryEscolhas(),
-              (conteudo.length > 0 
-              && conteudo[questionIndex] != null
-              && conteudo[questionIndex].respostaText)
+              (conteudo.length > 0 &&
+                      conteudo[questionIndex] != null &&
+                      conteudo[questionIndex].respostaText)
                   ? Container(
                       margin: EdgeInsets.all(40),
                       child: TextField(
@@ -475,10 +517,12 @@ class _PerguntasState extends State<Perguntas>
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                         onPressed: () {
-                          Navigator.of(context)
-                              .pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) => Finalizar(argument: widget.image),),);
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  Finalizar(argument: widget.image),
+                            ),
+                          );
                         },
                       ),
               ),

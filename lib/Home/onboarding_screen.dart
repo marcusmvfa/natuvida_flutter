@@ -26,13 +26,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _indicator(bool isActive) {
+    setState(() {
+      colorButton = 0;
+    });
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
       margin: EdgeInsets.symmetric(horizontal: 8),
       height: 8,
       width: isActive ? 24 : 16,
       decoration: BoxDecoration(
-        color: isActive ? Colors.white : Color(0xddff7aad),
+        color: isActive ? Colors.white : Colors.black54,
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );
@@ -76,6 +79,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: FlatButton(
+                        onPressed: () {
+                          prefs.setString('nomeCompleto', _nome.text);
+                  prefs.setString('email', _email.text);
+                  prefs.setBool('isLogged', true);
+                  Navigator.pushNamed(context, '/home');
+                        },
+                        child: Row(mainAxisSize: MainAxisSize.min, children: [
+                          Text(
+                            "Pular",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Icon(Icons.arrow_forward_ios, color: Colors.white,)
+                        ]),),
+                  ),
                   Center(
                     child: Container(
                         height: 200,
@@ -258,20 +278,41 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 height: 15,
                               ),
                               FlatButton(
+                                color: colorButton == 0 || colorButton == 2
+                                    ? Colors.white
+                                    : Colors.greenAccent,
                                 child: Text(
                                   "SIM, EU QUERO EVOLUIR",
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
+                                      color: Colors.black87, fontSize: 18),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  setState(() {
+                                    colorButton = 1;
+                                  });
+                                },
                               ),
                               FlatButton(
-                                child: Text(
-                                  "NÃO, PREFIRO FAZER ISSO SOZINHO(A)",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16),
+                                color: colorButton == 0 || colorButton == 1
+                                    ? Colors.white
+                                    : Colors.red,
+                                child: Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Text(
+                                    "NÃO, PREFIRO FAZER ISSO SOZINHO(A)",
+                                    style: TextStyle(
+                                        color:
+                                            colorButton == 0 || colorButton == 1
+                                                ? Colors.black87
+                                                : Colors.white,
+                                        fontSize: 16),
+                                  ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  setState(() {
+                                    colorButton = 2;
+                                  });
+                                },
                               )
                             ],
                           ),

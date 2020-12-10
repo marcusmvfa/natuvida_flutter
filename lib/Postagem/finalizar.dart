@@ -48,9 +48,10 @@ class _FinalizarState extends State<Finalizar> {
                 padding: EdgeInsets.only(top: 20),
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Image(
+                  child: Image.network(
+                    "https://secure-temple-09752.herokuapp.com" + widget.argument,
                     fit: BoxFit.fill,
-                    image: AssetImage('assets/imgPosts/' + widget.argument),
+                    // image: AssetImage('assets/imgPosts/' + widget.argument),
                     // height: 110,
                   ),
                 ),
@@ -105,7 +106,7 @@ class _FinalizarState extends State<Finalizar> {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/');
+                      Navigator.of(context).pushNamed('/home');
                     },
                   ),
                 ),

@@ -16,25 +16,27 @@ class _HomeState extends State<Home> {
   SharedPreferences prefs;
   String nome = "";
   String email = "";
-  List<PostagemDetalheModel> listPostagens = [];
-
-_getPostagens() async {
-  var a = await Requests.getPostagens();
-  List dec = jsonDecode(a);
   List<PostagemModel> listPostagens = [];
-  List<PostagemDetalheModel> listDetalhesPostagens = [];
-  dec.forEach((element) {
-    var post = PostagemModel.fromJson(element);
-    element["postagemDetalhes"].forEach((el) {
-      var obj = PostagemDetalheModel.fromJson(el);
-      listDetalhesPostagens.add(obj);
+
+  _getPostagens() async {
+    var a = await Requests.getPostagens();
+    List dec = jsonDecode(a);
+    List<PostagemDetalheModel> listDetalhesPostagens = [];
+    dec.forEach((element) {
+      var post = PostagemModel.fromJson(element);
+      element["postagemDetalhes"].forEach((el) {
+        var obj = PostagemDetalheModel.fromJson(el);
+        listDetalhesPostagens.add(obj);
+      });
+      post.detalhesPostagens = listDetalhesPostagens;
+      listDetalhesPostagens = [];
+      setState((){
+      listPostagens.add(post);
+      listPostagens.sort((a,b) => a.order.compareTo(b.order));
+      });
     });
-    post.detalhesPostagens = listDetalhesPostagens;
-    listPostagens.add(post);
-    // print(obj);
-  });
-  print(dec);
-}
+  }
+
   _instantiatePrefs() async {
     await SharedPreferences.getInstance().then((value) {
       prefs = value;
@@ -43,8 +45,8 @@ _getPostagens() async {
         email = prefs.getString("email");
       });
     });
-
   }
+
   @override
   void initState() {
     Requests.getUsers();
@@ -52,6 +54,7 @@ _getPostagens() async {
     _instantiatePrefs();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +71,7 @@ _getPostagens() async {
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: AssetImage('assets/perfilMarcus.jpg'),
+                      image: AssetImage('assets/natuvida_logo.png'),
                     ),
                   ),
                 ),
@@ -96,8 +99,10 @@ _getPostagens() async {
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 10),
-                        child: Text("(45) 99999-9999",
-                        style: TextStyle(fontSize: 12),),
+                        child: Text(
+                          "(45) 99999-9999",
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                     ])
               ]),
@@ -167,402 +172,99 @@ _getPostagens() async {
             ),
             Expanded(
               child: SizedBox(
-                child: new ListView(
-                  children: [
-                    GestureDetector(
-                        child: Container(
-                          width: double.maxFinite,
-                          height: 200,
-                          margin: EdgeInsets.only(
-                              top: 10, bottom: 10, left: 25, right: 25),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black12),
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5),
-        spreadRadius: 2,
-        blurRadius: 3,
-        offset: Offset(0, 3), // changes position of shadow
-      ),
-    ],
-                          ),
-                          child: Center(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                      ),
-                                    ),
-                                    child: Image(
-                                      fit: BoxFit.fitWidth,
-                                      image: AssetImage('assets/imgPosts/AUTOCONHECIMENTO.jpg'),
-                                      height: 110,
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 20),
-                                        child: Text(
-                                          "Auto Conhecimento?",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
+                child: new ListView.builder(
+                    itemCount: listPostagens.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                          child: Container(
+                            width: double.maxFinite,
+                            height: 200,
+                            margin: EdgeInsets.only(
+                                top: 10, bottom: 10, left: 25, right: 25),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black12),
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 3,
+                                  offset: Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
                                         ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          right: 20,
-                                        ),
-                                        child: Chip(
-                                            label: Text(
-                                              "Auto Conhecimento",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12),
-                                            ),
-                                            backgroundColor:
-                                                Colors.lightGreen[600]),
-                                      )
-                                    ],
-                                  ),
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 20, top: 10),
-                                      child: Text("12 de set. 2020",
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle()))
-                                ]),
-                          ),
-                        ),
-                        onTap: () {
-                          // Navigator.pushNamed(context, '/postagem', arguments: "auto-conhecimento");
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Perguntas(argument: 'auto-conhecimento')));
-                        }),
-                    GestureDetector(
-                        child: Container(
-                          width: double.maxFinite,
-                          height: 200,
-                          margin: EdgeInsets.only(
-                              top: 10, bottom: 10, left: 25, right: 25),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black12),
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                            boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5),
-        spreadRadius: 2,
-        blurRadius: 3,
-        offset: Offset(0, 3), // changes position of shadow
-      ),
-    ],
-                          ),
-                          child: Center(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
+                                      child: Image.network(
+                                        "https://secure-temple-09752.herokuapp.com" + listPostagens[index].imgPostagem,
+                                        fit: BoxFit.fitWidth,
+                                        // image: AssetImage(
+                                        //     'assets/imgPosts/AUTOCONHECIMENTO.jpg'),
+                                        height: 110,
                                       ),
                                     ),
-                                    child: Image(
-                                      fit: BoxFit.fitWidth,
-                                      image: AssetImage('assets/imgPosts/EMOCOES.jpg'),
-                                      height: 110,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 20, top: 20),
+                                          child: Text(
+                                            listPostagens[index].title,
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        // Padding(
+                                        //   padding: EdgeInsets.only(
+                                        //     right: 20,
+                                        //   ),
+                                        //   child: Chip(
+                                        //       label: Text(
+                                        //         "Auto Conhecimento",
+                                        //         style: TextStyle(
+                                        //             color: Colors.white,
+                                        //             fontWeight: FontWeight.bold,
+                                        //             fontSize: 12),
+                                        //       ),
+                                        //       backgroundColor:
+                                        //           Colors.lightGreen[600]),
+                                        // )
+                                      ],
                                     ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.only(left: 20),
-                                        width: 200,
-                                        child: Text(
-                                          "Emoções e as Cinco Linguagens do Amor",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          right: 20,
-                                        ),
-                                        child: Chip(
-                                            label: Text(
-                                              "Emoçoes",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12),
-                                            ),
-                                            backgroundColor:
-                                                Colors.amber),
-                                      )
-                                    ],
-                                  ),
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 20, top: 10),
-                                      child: Text("20 de set. 2020",
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle()))
-                                ]),
+                                    Padding(
+                                        padding:
+                                            EdgeInsets.only(left: 20, top: 10),
+                                        child: Text("12 de set. 2020",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle()))
+                                  ]),
+                            ),
                           ),
-                        ),
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Perguntas(argument: 'emocoes', image: 'EMOCOES.jpg')));
-                        }),
-                    GestureDetector(
-                        child: Container(
-                          width: double.maxFinite,
-                          height: 200,
-                          margin: EdgeInsets.only(
-                              top: 10, bottom: 10, left: 25, right: 25),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black12),
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                            boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5),
-        spreadRadius: 2,
-        blurRadius: 3,
-        offset: Offset(0, 3), // changes position of shadow
-      ),
-    ],
-                          ),
-                          child: Center(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                      ),
-                                    ),
-                                    child: Image(
-                                      fit: BoxFit.fitWidth,
-                                      image: AssetImage('assets/imgPosts/maslow.jpg'),
-                                      height: 110,
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 20),
-                                        child: Text(
-                                          "Pirâmide de Maslow",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          right: 20,
-                                        ),
-                                        child: Chip(
-                                            label: Text(
-                                              "Auto Conhecimento",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12),
-                                            ),
-                                            backgroundColor:
-                                                Colors.lightGreen[600]),
-                                      )
-                                    ],
-                                  ),
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 20, top: 10),
-                                      child: Text("27 de set. 2020",
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle()))
-                                ]),
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Perguntas(argument: 'maslow')));
-                        }),
-                        GestureDetector(
-                        child: Container(
-                          width: double.maxFinite,
-                          height: 200,
-                          margin: EdgeInsets.only(
-                              top: 10, bottom: 10, left: 25, right: 25),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black12),
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                            boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5),
-        spreadRadius: 2,
-        blurRadius: 3,
-        offset: Offset(0, 3), // changes position of shadow
-      ),
-    ],
-                          ),
-                          child: Center(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                      ),
-                                    ),
-                                    child: Image(
-                                      fit: BoxFit.fitWidth,
-                                      image: AssetImage('assets/imgPosts/MINDSET.jpg'),
-                                      height: 110,
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 20),
-                                        child: Text(
-                                          "MindSet",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          right: 20,
-                                        ),
-                                        child: Chip(
-                                            label: Text(
-                                              "MindSet",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12),
-                                            ),
-                                            backgroundColor:
-                                                Colors.teal),
-                                      )
-                                    ],
-                                  ),
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 20, top: 10),
-                                      child: Text("01 de nov. 2020",
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle()))
-                                ]),
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Perguntas(argument: 'mindset')));
-                        }),
-                        GestureDetector(
-                        child: Container(
-                          width: double.maxFinite,
-                          height: 200,
-                          margin: EdgeInsets.only(
-                              top: 10, bottom: 10, left: 25, right: 25),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black12),
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                            boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5),
-        spreadRadius: 2,
-        blurRadius: 3,
-        offset: Offset(0, 3), // changes position of shadow
-      ),
-    ],
-                          ),
-                          child: Center(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                      ),
-                                    ),
-                                    child: Image(
-                                      fit: BoxFit.fitWidth,
-                                      image: AssetImage('assets/imgPosts/CEREBRO.jpg'),
-                                      height: 110,
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 20),
-                                        child: Text(
-                                          "DESAFIO",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          right: 20,
-                                        ),
-                                        child: Chip(
-                                            label: Text(
-                                              "Desafio",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12),
-                                            ),
-                                            backgroundColor:
-                                                Colors.orange),
-                                      )
-                                    ],
-                                  ),
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 20, top: 10),
-                                      child: Text("14 de nov. 2020",
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle()))
-                                ]),
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Perguntas(argument: 'desafio')));
-                        })
-                  ],
-                ),
+                          onTap: () {
+                            // Navigator.pushNamed(context, '/postagem', arguments: "auto-conhecimento");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Perguntas(
+                                      postagemDetalhes: [listPostagens[index].detalhesPostagens],
+                                        argument: listPostagens[index].title,
+                                        image: listPostagens[index].imgPostagem,),),);
+                          });
+                    }),
               ),
             ),
           ],

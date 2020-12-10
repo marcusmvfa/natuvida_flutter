@@ -4,40 +4,71 @@
     "respostaText": false,
   "video": "https://youtu.be/9OiWA0qawIo"
 },
+{
+  "texto": "Skinner, um psicólogo behaviorista nos mostra em sua teoria que só é possível nos conhecermos através da interação social.\n\nA origem da palavra consciência vem do latim “comscience” e significa co-conhecimento, ou seja, “conhecendo com os outros”.\n\nPosto isto, compreende-se que o autoconhecimento é a consciência de si com os outros. Afinal, estamos a todo instante respondendo aos estímulos das demais pessoas em nosso entorno, sozinhos não saberíamos como realmente somos.",
+  "flPergunta": false,
+  "respostaText": false,
+  "title": "O papel da sociedade no autoconhecimento"
+},
+{
+  "texto": "Além do mais, reproduzimos muitos comportamentos do meio ao qual crescemos, mas de forma automática, e pela falta de se conhecer, apenas repetimos formas de pensar e de agir.\n\nSó é possível alterarmos algo em nós, quando estamos conscientes de nossos comportamentos, e olhando para nossas ações diárias, refletirmos sobre tais mudanças, ou seja, pensar em novas formas de agir, desenvolvendo o autocontrole, que melhor descreva a nossa forma de ser no mundo.",
+  "flPergunta": false,
+  "respostaText": false,
+  "title": "O papel da sociedade no autoconhecimento"
+},
+{
+  "texto": "Através do autocontrole, temos respostas mais conscientes ao meio em que vivemos, e não tão automáticas, que por muito tempo estamos acostumados a ter, e nem sabemos o porque fazemos o que fazemos.\n\nDessa forma, o ser humano pode planejar a sua vida, tornar o ambiente que convive mais saudável e com relacionamento interpessoal mais positivo.",
+  "flPergunta": false,
+  "respostaText": false,
+  "title": "O papel da sociedade no autoconhecimento"
+},
+{
+  "texto": "Entendemos um pouco melhor sobre o que é o autoconhecimento.\n\nPor isso, gostaria que nos respondesse algumas perguntas. ",
+  "flPergunta": false,
+  "respostaText": false,
+  "title": "O papel da sociedade no autoconhecimento"
+},
   {
     "texto": "O que te faz bem?",
     "flPergunta": true,
-    "respostaText": true
+    "respostaText": true,
+    "title": "Quiz autoconhecimento"
   },
   {
     "texto": "O que te motiva?",
     "flPergunta": true,
-    "respostaText": true
+    "respostaText": true,
+    "title": "Quiz autoconhecimento"
   },
   {
     "texto": "O que você mais gosta de fazer?",
     "flPergunta": true,
-    "respostaText": true
+    "respostaText": true,
+    "title": "Quiz autoconhecimento"
   },
   {
     "texto": " O que te torna forte?",
     "flPergunta": true,
-    "respostaText": true
+    "respostaText": true,
+    "title": "Quiz autoconhecimento"
   },
   {
     "texto": "O que te enfraquece?",
     "flPergunta": true,
-    "respostaText": true
+    "respostaText": true,
+    "title": "Quiz autoconhecimento"
   },
   {
     "texto": "O que você precisa melhorar?",
     "flPergunta": true,
-    "respostaText": true
+    "respostaText": true,
+    "title": "Quiz autoconhecimento"
   },
   {
     "texto": "Quando uma pessoa pede algo para você (ex: sair para algum lugar, falar com alguém, comprar algo, ir para uma viagem, etc), e no fundo não quer. Você responde:",
     "flPergunta": true,
-    "respostaText": false
+    "respostaText": false,
+    "title": "Quiz autoconhecimento"
   },
   {
     "texto": "DIZER NÃO é fundamental para o autoconhecimento e também para a sua saúde mental.\n Quando as pessoas fazem algo que não têm vontade por não conseguirem negar para outra pessoa, esse gasto de energia pode trazer problemas futuros. \nLembre-se saber DIZER NÃO é libertador.",
