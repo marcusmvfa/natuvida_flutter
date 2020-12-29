@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:natuvida_flutter/Login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'home.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -85,8 +88,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         onPressed: () {
                           prefs.setString('nomeCompleto', _nome.text);
                   prefs.setString('email', _email.text);
-                  prefs.setBool('isLogged', true);
-                  Navigator.pushNamed(context, '/home');
+                  // prefs.setBool('isLogged', true);
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
                         },
                         child: Row(mainAxisSize: MainAxisSize.min, children: [
                           Text(
@@ -350,8 +353,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onTap: () {
                   prefs.setString('nomeCompleto', _nome.text);
                   prefs.setString('email', _email.text);
-                  prefs.setBool('isLogged', true);
-                  Navigator.pushNamed(context, '/home');
+                  // prefs.setBool('isLogged', true);
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
                 },
               )
             : Text(''));

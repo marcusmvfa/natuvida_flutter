@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:natuvida_flutter/Home/onboarding_screen.dart';
+import 'package:natuvida_flutter/Login/login.dart';
 import 'package:natuvida_flutter/Postagem/perguntas.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,7 +20,7 @@ void main() async{
     login = false;
   }
 
-  page = login == false ? OnboardingScreen() : Home();
+  page = login == false ? OnboardingScreen() : LoginScreen();
   runApp(MyApp(page: page));
 }
 
