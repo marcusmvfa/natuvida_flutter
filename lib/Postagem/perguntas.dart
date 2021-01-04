@@ -5,13 +5,15 @@ import 'package:flutter/services.dart';
 import 'package:natuvida_flutter/model/postagemDetalheModel.dart';
 import 'package:natuvida_flutter/Postagem/Finalizar.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class Perguntas extends StatefulWidget {
+  final String id;
   final String argument;
   final String image;
   final dynamic postagemDetalhes;
 
-  const Perguntas({Key key, this.argument, this.image, this.postagemDetalhes})
+  const Perguntas({Key key, this.id, this.argument, this.image, this.postagemDetalhes})
       : super(key: key);
 
   @override
@@ -268,10 +270,21 @@ class _PerguntasState extends State<Perguntas>
       return Container();
   }
 
+  getPostagemDetalhes()async {
+    try {
+var response = await http.get("http://192.168.0.117:3000/getPostagemDetalhes?id=" + widget.id.toString());
+      print(response);
+    } catch (e) {
+      print(e);
+    }
+
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getPostagemDetalhes();
     parseJson();
     _rotationController =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);

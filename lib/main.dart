@@ -20,7 +20,7 @@ void main() async{
     login = false;
   }
 
-  page = login == false ? OnboardingScreen() : LoginScreen();
+  page = login == false ? OnboardingScreen() : Home();
   runApp(MyApp(page: page));
 }
 

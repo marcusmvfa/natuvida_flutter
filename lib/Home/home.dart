@@ -24,11 +24,11 @@ class _HomeState extends State<Home> {
     List<PostagemDetalheModel> listDetalhesPostagens = [];
     dec.forEach((element) {
       var post = PostagemModel.fromJson(element);
-      element["postagemDetalhes"].forEach((el) {
-        var obj = PostagemDetalheModel.fromJson(el);
-        listDetalhesPostagens.add(obj);
-      });
-      post.detalhesPostagens = listDetalhesPostagens;
+      // element["postagemDetalhes"].forEach((el) {
+      //   var obj = PostagemDetalheModel.fromJson(el);
+      //   listDetalhesPostagens.add(obj);
+      // });
+      // post.detalhesPostagens = listDetalhesPostagens;
       listDetalhesPostagens = [];
       setState((){
       listPostagens.add(post);
@@ -260,7 +260,7 @@ class _HomeState extends State<Home> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Perguntas(
-                                      postagemDetalhes: [listPostagens[index].detalhesPostagens],
+                                      id: listPostagens[index].id,
                                         argument: listPostagens[index].title,
                                         image: listPostagens[index].imgPostagem,),),);
                           });

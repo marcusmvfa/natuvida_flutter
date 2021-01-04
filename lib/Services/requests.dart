@@ -9,7 +9,7 @@ getUsers(){
   });
 }
 dynamic getPostagens() async {
-  var posts = await http.get("https://secure-temple-09752.herokuapp.com/postagens").then((response) {
+  var posts = await http.get("https://secure-temple-09752.herokuapp.com/getPostagens").then((response) {
     if(response.statusCode == 200){
       return response.body;
     }
