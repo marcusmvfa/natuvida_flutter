@@ -136,7 +136,7 @@ class _HomeState extends State<Home> {
           Positioned(
             bottom: 25,
             left: 100,
-            child: Text("Copyright @ 2020"),
+            child: Text("Copyright @ 2021"),
           )
         ],
       )),

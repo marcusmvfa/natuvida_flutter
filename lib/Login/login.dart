@@ -17,8 +17,6 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController controllerSenha = new TextEditingController();
   SharedPreferences prefs;
   loginApp(context) {
-    Scaffold.of(context)
-        .showSnackBar(SnackBar(content: Text('Processando requisição')));
     String url = "https://secure-temple-09752.herokuapp.com/login";
     http.post(url, body: {
       "email": controllerEmail.text,
@@ -107,7 +105,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                ElevatedButton(
+                // ElevatedButton(
+                  RaisedButton(
                   onPressed: () {
                     // Validate returns true if the form is valid, otherwise false.
                     if (_formKey.currentState.validate()) {
@@ -122,7 +121,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: Text('Entrar'),
                 ),
-                ElevatedButton(
+                // ElevatedButton(
+                  RaisedButton(
                   onPressed: () {
                     Navigator.push(
                         context,

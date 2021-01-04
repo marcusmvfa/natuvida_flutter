@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:natuvida_flutter/model/postagemDetalheModel.dart';
+import 'package:natuvida_flutter/model/userModel.dart';
 import 'package:natuvida_flutter/Postagem/Finalizar.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Perguntas extends StatefulWidget {
   final String id;
@@ -13,7 +15,8 @@ class Perguntas extends StatefulWidget {
   final String image;
   final dynamic postagemDetalhes;
 
-  const Perguntas({Key key, this.id, this.argument, this.image, this.postagemDetalhes})
+  const Perguntas(
+      {Key key, this.id, this.argument, this.image, this.postagemDetalhes})
       : super(key: key);
 
   @override
@@ -30,6 +33,7 @@ class _PerguntasState extends State<Perguntas>
   AnimationController _rotationController;
   Animation rotation;
   List<PostagemDetalheModel> conteudo = new List<PostagemDetalheModel>();
+  SharedPreferences prefs;
 
   PlayerState _playerState;
   YoutubeMetaData _videoMetaData;
@@ -42,8 +46,12 @@ class _PerguntasState extends State<Perguntas>
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   void _geraPerguntas() {
+    var userDataJson = jsonDecode(prefs.getString("userData"));
+    var decoded = jsonDecode(userDataJson);
+    var userData = UserModel.fromJson(decoded);
     this.conteudo.forEach((element) {
-      this.respostas.add("");
+      this.respostas.add(
+          {"idPergunta": element.id, "idUsuario": userData.id, "valor": ""});
     });
   }
 
@@ -51,12 +59,14 @@ class _PerguntasState extends State<Perguntas>
     if (_youtubePlayerController != null) _youtubePlayerController = null;
     if (questionIndex < conteudo.length - 1) {
       setState(() {
-        this.respostas[questionIndex] = respostaController.text;
+        this.respostas[questionIndex]["valor"] = respostaController.text != ""
+            ? respostaController.text
+            : this.respostas[questionIndex]["valor"];
 
         questionIndex++;
         questionText = conteudo[questionIndex].texto;
-        if (this.respostas[questionIndex].toString().isNotEmpty)
-          respostaController.text = this.respostas[questionIndex];
+        if (this.respostas[questionIndex]["valor"].toString().isNotEmpty)
+          respostaController.text = this.respostas[questionIndex]["valor"];
         else
           respostaController.text = "";
         if (conteudo[questionIndex].video != null &&
@@ -80,7 +90,7 @@ class _PerguntasState extends State<Perguntas>
       setState(() {
         questionIndex--;
         questionText = conteudo[questionIndex].texto;
-        respostaController.text = this.respostas[questionIndex];
+        respostaController.text = this.respostas[questionIndex]["valor"];
         if (conteudo[questionIndex].video != null &&
             conteudo[questionIndex].video != "") {
           conteudo[questionIndex].video =
@@ -104,8 +114,9 @@ class _PerguntasState extends State<Perguntas>
 
   Future parseJson() async {
     // String jsonString = await _loadFromAsset();
-    var jsonString = widget.postagemDetalhes[0];
-    print(jsonString);
+    // var jsonString = widget.postagemDetalhes[0];
+    // var jsonString = conteudo[0];
+    // print(jsonString);
     // String jsonString = widget.argument;
     // switch (widget.argument) {
     //   case 'auto-conhecimento':
@@ -133,10 +144,13 @@ class _PerguntasState extends State<Perguntas>
     // }
     // final jsonResponse = jsonDecode(jsonString) as List;
     // conteudo = jsonResponse.map((e) => PostagemDetalheModel.fromJson(e)).toList();
-    conteudo = jsonString;
+
+    // conteudo = jsonString;
+
     // .map((data) => PostagemModel.fromJson(data))
     // .toList();
-    if (conteudo[questionIndex].video != null &&
+    if (conteudo.length > 0 &&
+        conteudo[questionIndex].video != null &&
         conteudo[questionIndex].video != "") {
       conteudo[questionIndex].video =
           YoutubePlayer.convertUrlToId(conteudo[questionIndex].video);
@@ -184,33 +198,34 @@ class _PerguntasState extends State<Perguntas>
         return Container(
           child: Column(children: [
             RaisedButton(
-              color: respostas[questionIndex] == "sim"
+              color: respostas[questionIndex]["valor"] == "sim"
                   ? Colors.green
                   : Colors.white,
               child: Text(
                 "Sim",
                 style: TextStyle(
-                    color: respostas[questionIndex] == "sim"
+                    color: respostas[questionIndex]["valor"] == "sim"
                         ? Colors.white
                         : Colors.black),
               ),
               onPressed: () {
                 setState(() {
-                  respostas[questionIndex] = "sim";
+                  respostas[questionIndex]["valor"] = "sim";
                 });
               },
             ),
             RaisedButton(
-              color:
-                  respostas[questionIndex] == "nao" ? Colors.red : Colors.white,
+              color: respostas[questionIndex]["valor"] == "nao"
+                  ? Colors.red
+                  : Colors.white,
               child: Text("Não",
                   style: TextStyle(
-                      color: respostas[questionIndex] == "nao"
+                      color: respostas[questionIndex]["valor"] == "nao"
                           ? Colors.white
                           : Colors.black)),
               onPressed: () {
                 setState(() {
-                  respostas[questionIndex] = "nao";
+                  respostas[questionIndex]["valor"] = "nao";
                 });
               },
             ),
@@ -233,7 +248,7 @@ class _PerguntasState extends State<Perguntas>
                 margin:
                     EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25),
                 decoration: BoxDecoration(
-                    color: respostas[questionIndex] == escolhas[index]
+                    color: respostas[questionIndex]["valor"] == escolhas[index]
                         ? Colors.green
                         : Colors.white,
                     border: Border.all(color: Colors.black12),
@@ -249,16 +264,18 @@ class _PerguntasState extends State<Perguntas>
                   child: Text(
                     escolhas[index].toString(),
                     style: TextStyle(
-                      color: respostas[questionIndex] == escolhas[index]
-                          ? Colors.white
-                          : Colors.black,
+                      color:
+                          respostas[questionIndex]["valor"] == escolhas[index]
+                              ? Colors.white
+                              : Colors.black,
                     ),
                   ),
                 ),
               ),
               onTap: () {
                 setState(() {
-                  respostas[questionIndex] = escolhas[index].toString();
+                  respostas[questionIndex]["valor"] =
+                      escolhas[index].toString();
                 });
               },
             );
@@ -270,28 +287,61 @@ class _PerguntasState extends State<Perguntas>
       return Container();
   }
 
-  getPostagemDetalhes()async {
+  Future getPostagemDetalhes() async {
     try {
-var response = await http.get("http://192.168.0.117:3000/getPostagemDetalhes?id=" + widget.id.toString());
-      print(response);
+      var response = await http.get(
+          "https://secure-temple-09752.herokuapp.com/getPostagemDetalhes?id=" +
+              widget.id.toString());
+      List list = json.decode(response.body);
+      List<PostagemDetalheModel> listDetalehs =
+          new List<PostagemDetalheModel>();
+      list.forEach((element) {
+        var detail = PostagemDetalheModel.fromJson(element);
+        listDetalehs.add(detail);
+      });
+      setState(() {
+        conteudo = listDetalehs;
+      });
     } catch (e) {
       print(e);
     }
+  }
 
+  Future postRespostas() async {
+    var fin = json.encode(respostas);
+    print(fin);
+    var response = await http.post("https://secure-temple-09752.herokuapp.com/postRespostas",
+        body: fin,
+        headers: {'Content-type': 'application/json'}).then((response) {
+      if (response.statusCode == 200) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (BuildContext context) =>
+                Finalizar(argument: widget.image),
+          ),
+        );
+      }
+    });
+  }
+
+  void getPrefs() async {
+    prefs = await SharedPreferences.getInstance();
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getPostagemDetalhes();
-    parseJson();
     _rotationController =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     _rotationController.forward();
     rotation = Tween(begin: 0.0, end: 2.0).animate(_rotationController);
     _videoMetaData = const YoutubeMetaData();
     _playerState = PlayerState.unknown;
+    getPostagemDetalhes().then((value) async {
+      await getPrefs();
+      parseJson();
+    });
   }
 
   @override
@@ -385,14 +435,18 @@ var response = await http.get("http://192.168.0.117:3000/getPostagemDetalhes?id=
               Wrap(children: [
                 Center(
                   child: Padding(
-                    padding: conteudo[questionIndex] != null &&
-                              conteudo[questionIndex].title != null ? EdgeInsets.all(20): EdgeInsets.all(0),
+                    padding: conteudo.length > 0 &&
+                            conteudo[questionIndex] != null &&
+                            conteudo[questionIndex].title != null
+                        ? EdgeInsets.all(20)
+                        : EdgeInsets.all(0),
                     child: Text(
-                      conteudo[questionIndex] != null &&
+                      conteudo.length > 0 &&
+                              conteudo[questionIndex] != null &&
                               conteudo[questionIndex].title != null
                           ? conteudo[questionIndex].title
                           : "",
-                          textAlign: TextAlign.center,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -530,12 +584,13 @@ var response = await http.get("http://192.168.0.117:3000/getPostagemDetalhes?id=
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                         onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  Finalizar(argument: widget.image),
-                            ),
-                          );
+                          if (conteudo.length - 1 == questionIndex) {
+                            respostas[questionIndex]["valor"] =
+                                respostaController.text != ""
+                                    ? respostaController.text
+                                    : respostas[questionIndex]["valor"];
+                          }
+                          postRespostas();
                         },
                       ),
               ),

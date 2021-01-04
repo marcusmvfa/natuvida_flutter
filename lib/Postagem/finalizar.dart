@@ -29,19 +29,19 @@ class _FinalizarState extends State<Finalizar> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Center(
-                  child: Chip(
-                      label: Text(
-                        "Auto Conhecimento",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12),
-                      ),
-                      backgroundColor: Colors.lightGreen[600]),
-                ),
-              ]),
+              // Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              //   Center(
+              //     child: Chip(
+              //         label: Text(
+              //           "Auto Conhecimento",
+              //           style: TextStyle(
+              //               color: Colors.white,
+              //               fontWeight: FontWeight.bold,
+              //               fontSize: 12),
+              //         ),
+              //         backgroundColor: Colors.lightGreen[600]),
+              //   ),
+              // ]),
               //Imagem da postagem
               Container(
                 width: double.maxFinite,
