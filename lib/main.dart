@@ -23,10 +23,10 @@ void main() async {
 
   page = login == false ? OnboardingScreen() : Home();
   runApp(
-    DevicePreview(
-      builder: (context) => MyApp(page: page),
-      // MyApp(page: page),
-    ),
+    // DevicePreview(
+      // builder: (context) => MyApp(page: page),
+      MyApp(page: page),
+    // ),
   );
 }
 
@@ -53,8 +53,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        locale: DevicePreview.locale(context), // Add the locale here
-        builder: DevicePreview.appBuilder,
+        // locale: DevicePreview.locale(context), // Add the locale here
+        // builder: DevicePreview.appBuilder,
         home: page);
   }
 }
