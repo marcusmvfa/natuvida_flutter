@@ -64,7 +64,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomPadding: false,
+        // resizeToAvoidBottomPadding: false,
         body: Container(
           padding: EdgeInsets.only(bottom: 20),
           child: SingleChildScrollView(

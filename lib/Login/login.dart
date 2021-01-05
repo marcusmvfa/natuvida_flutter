@@ -53,105 +53,108 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomPadding: false,
-        body: Container(
-          child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-            return Form(
-              key: _formKey,
-              child: Column(children: [
-                Center(
-                  child: Image.asset('assets/natuvida_logo.png',
-                  height: (MediaQuery.of(context).size.height * 0.4),
-                      color: Colors.green),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30, left: 30, right: 30),
-                  child: Container(
-                    width: constraints.maxWidth * 0.70,
-                    child: TextFormField(
-                      controller: controllerEmail,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        icon: Icon(Icons.mail),
-                        labelText: "E-mail",
-                        hintText: "example@gmail.com",
+        // resizeToAvoidBottomPadding: false,
+        body: SingleChildScrollView(
+          child: Container(
+            child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+              return Form(
+                key: _formKey,
+                child: Column(children: [
+                  Center(
+                    child: Image.asset('assets/natuvida_logo.png',
+                        height: (MediaQuery.of(context).size.height * 0.4),
+                        color: Colors.green),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 30, left: 30, right: 30),
+                    child: Container(
+                      width: constraints.maxWidth * 0.70,
+                      child: TextFormField(
+                        controller: controllerEmail,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.mail),
+                          labelText: "E-mail",
+                          hintText: "example@gmail.com",
+                        ),
+                        // The validator receives the text that the user has entered.
+                        validator: (value) {
+                          if (value.isEmpty || !value.contains('@')) {
+                            return "Insira um e-mail válido!";
+                          }
+                          return null;
+                        },
                       ),
-                      // The validator receives the text that the user has entered.
-                      validator: (value) {
-                        if (value.isEmpty || !value.contains('@')) {
-                          return "Insira um e-mail válido!";
-                        }
-                        return null;
-                      },
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 30, right: 30, bottom: 15),
-                  child: Container(
-                    width: constraints.maxWidth * 0.70,
-                    child: TextFormField(
-                      controller: controllerSenha,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        icon: Icon(Icons.lock),
-                        labelText: "Senha",
-                        hintText: "*********",
+                  Padding(
+                    padding: EdgeInsets.only(left: 30, right: 30, bottom: 15),
+                    child: Container(
+                      width: constraints.maxWidth * 0.70,
+                      child: TextFormField(
+                        controller: controllerSenha,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.lock),
+                          labelText: "Senha",
+                          hintText: "*********",
+                        ),
+                        // The validator receives the text that the user has entered.
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Insira sua senha!";
+                          }
+                          return null;
+                        },
                       ),
-                      // The validator receives the text that the user has entered.
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return "Insira sua senha!";
-                        }
-                        return null;
-                      },
                     ),
                   ),
-                ),
-                // ElevatedButton(
-                RaisedButton(
-                  color: Colors.green,
-                  onPressed: () {
-                    // Validate returns true if the form is valid, otherwise false.
-                    if (_formKey.currentState.validate()) {
-                      // If the form is valid, display a snackbar. In the real world,
-                      // you'd often call a server or save the information in a database.
+                  // ElevatedButton(
+                  RaisedButton(
+                    color: Colors.green,
+                    onPressed: () {
+                      // Validate returns true if the form is valid, otherwise false.
+                      if (_formKey.currentState.validate()) {
+                        // If the form is valid, display a snackbar. In the real world,
+                        // you'd often call a server or save the information in a database.
 
-                      Scaffold.of(context).showSnackBar(
-                          SnackBar(content: Text('Processando requisição')));
+                        Scaffold.of(context).showSnackBar(
+                            SnackBar(content: Text('Processando requisição')));
 
-                      loginApp(context);
-                    }
-                  },
-                  child: Text(
-                    'Entrar',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                // ElevatedButton(
-                RaisedButton(
-                  color: Colors.green,
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                CadastroScreen()));
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                    Icon(Icons.add, color: Colors.white,),
-                    Text(
-                      'Novo Usuário',
+                        loginApp(context);
+                      }
+                    },
+                    child: Text(
+                      'Entrar',
                       style: TextStyle(color: Colors.white),
-                    )
-                  ]),
-                )
-              ]),
-            );
-          }),
+                    ),
+                  ),
+                  // ElevatedButton(
+                  RaisedButton(
+                    color: Colors.green,
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  CadastroScreen()));
+                    },
+                    child: Row(mainAxisSize: MainAxisSize.min, children: [
+                      Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        'Novo Usuário',
+                        style: TextStyle(color: Colors.white),
+                      )
+                    ]),
+                  )
+                ]),
+              );
+            }),
+          ),
         ),
       ),
     );
