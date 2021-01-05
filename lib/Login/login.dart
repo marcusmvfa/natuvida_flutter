@@ -25,12 +25,15 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response.statusCode == 200 && response.body != "null") {
         prefs.setString("userData", json.encode(response.body));
         prefs.setBool("isLogged", true);
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => Home()));
-
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) => Home()));
       } else {
-        Scaffold.of(context)
-        .showSnackBar(SnackBar(backgroundColor: Colors.red,
-          content: Text('Verifique o E-mail e Senha', style: TextStyle(color: Colors.white),)));
+        Scaffold.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              'Verifique o E-mail e Senha',
+              style: TextStyle(color: Colors.white),
+            )));
       }
     });
   }
@@ -59,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(children: [
                 Center(
                   child: Image.asset('assets/natuvida_logo.png',
+                  height: (MediaQuery.of(context).size.height * 0.4),
                       color: Colors.green),
                 ),
                 Padding(
@@ -84,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 30, right: 30),
+                  padding: EdgeInsets.only(left: 30, right: 30, bottom: 15),
                   child: Container(
                     width: constraints.maxWidth * 0.70,
                     child: TextFormField(
@@ -106,7 +110,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 // ElevatedButton(
-                  RaisedButton(
+                RaisedButton(
+                  color: Colors.green,
                   onPressed: () {
                     // Validate returns true if the form is valid, otherwise false.
                     if (_formKey.currentState.validate()) {
@@ -119,10 +124,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       loginApp(context);
                     }
                   },
-                  child: Text('Entrar'),
+                  child: Text(
+                    'Entrar',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 // ElevatedButton(
-                  RaisedButton(
+                RaisedButton(
+                  color: Colors.green,
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -130,7 +139,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             builder: (BuildContext context) =>
                                 CadastroScreen()));
                   },
-                  child: Text('Novo Usuário'),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                    Icon(Icons.add, color: Colors.white,),
+                    Text(
+                      'Novo Usuário',
+                      style: TextStyle(color: Colors.white),
+                    )
+                  ]),
                 )
               ]),
             );

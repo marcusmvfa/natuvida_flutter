@@ -8,8 +8,9 @@ import 'Home/home.dart';
 import 'Postagem/finalizar.dart';
 import 'Postagem/postagem.dart';
 import 'SobreNos/sobre_nos.dart';
+import 'package:device_preview/device_preview.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var page;
@@ -21,7 +22,12 @@ void main() async{
   }
 
   page = login == false ? OnboardingScreen() : Home();
-  runApp(MyApp(page: page));
+  runApp(
+    // DevicePreview(
+      // builder: (context) => MyApp(page: page),
+      MyApp(page: page),
+    // ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -32,23 +38,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
-      title: 'Natuvida',
-      initialRoute: '/',
-      routes: {
-        // '/': (context) => Home(),
-        '/home': (context) => Home(),
-        '/postagem': (context) => Postagem(),
-        '/perguntas': (context) => Perguntas(),
-        '/finalizar': (context) => Finalizar(),
-        '/sobrenos' : (context) => SobreNos()
-      },
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: page
-    );
+        title: 'Natuvida',
+        initialRoute: '/',
+        routes: {
+          // '/': (context) => Home(),
+          '/home': (context) => Home(),
+          '/postagem': (context) => Postagem(),
+          '/perguntas': (context) => Perguntas(),
+          '/finalizar': (context) => Finalizar(),
+          '/sobrenos': (context) => SobreNos()
+        },
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        // locale: DevicePreview.locale(context), // Add the locale here
+        // builder: DevicePreview.appBuilder,
+        home: page);
   }
 }

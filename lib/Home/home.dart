@@ -5,7 +5,9 @@ import 'package:natuvida_flutter/Postagem/perguntas.dart';
 import 'package:natuvida_flutter/Services/requests.dart' as Requests;
 import 'package:natuvida_flutter/model/postagemDetalheModel.dart';
 import 'package:natuvida_flutter/model/postagemModel.dart';
+import 'package:natuvida_flutter/model/userModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -16,7 +18,9 @@ class _HomeState extends State<Home> {
   SharedPreferences prefs;
   String nome = "";
   String email = "";
+  String telefone = "";
   List<PostagemModel> listPostagens = [];
+  bool isLoading = false;
 
   _getPostagens() async {
     var a = await Requests.getPostagens();
@@ -30,9 +34,10 @@ class _HomeState extends State<Home> {
       // });
       // post.detalhesPostagens = listDetalhesPostagens;
       listDetalhesPostagens = [];
-      setState((){
-      listPostagens.add(post);
-      listPostagens.sort((a,b) => a.order.compareTo(b.order));
+      setState(() {
+        listPostagens.add(post);
+        listPostagens.sort((a, b) => a.order.compareTo(b.order));
+        isLoading = false;
       });
     });
   }
@@ -40,15 +45,22 @@ class _HomeState extends State<Home> {
   _instantiatePrefs() async {
     await SharedPreferences.getInstance().then((value) {
       prefs = value;
+      var firstDecode = jsonDecode(value.getString("userData"));
+
+      UserModel user = UserModel.fromJson(jsonDecode(firstDecode));
       setState(() {
-        nome = prefs.getString("nomeCompleto");
-        email = prefs.getString("email");
+        nome = user.nome;
+        email = user.email;
+        telefone = user.telefone;
       });
     });
   }
 
   @override
   void initState() {
+    setState(() {
+      isLoading = true;
+    });
     Requests.getUsers();
     _getPostagens();
     _instantiatePrefs();
@@ -100,7 +112,7 @@ class _HomeState extends State<Home> {
                       Container(
                         margin: EdgeInsets.only(left: 10),
                         child: Text(
-                          "(45) 99999-9999",
+                          telefone,
                           style: TextStyle(fontSize: 12),
                         ),
                       ),
@@ -152,124 +164,143 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Container(
-              width: double.maxFinite,
-              margin: EdgeInsets.only(top: 25, left: 25, right: 25, bottom: 10),
-              padding: EdgeInsets.only(bottom: 10),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: Colors.black38, width: 2))),
-              child: Text(
-                "Ultimas Postagens",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            Expanded(
-              child: SizedBox(
-                child: new ListView.builder(
-                    itemCount: listPostagens.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                          child: Container(
-                            width: double.maxFinite,
-                            height: 200,
-                            margin: EdgeInsets.only(
-                                top: 10, bottom: 10, left: 25, right: 25),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black12),
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 2,
-                                  blurRadius: 3,
-                                  offset: Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                        ),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Container(
+              child: Column(
+                children: [
+                  Container(
+                    width: double.maxFinite,
+                    margin: EdgeInsets.only(
+                        top: 25, left: 25, right: 25, bottom: 10),
+                    padding: EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                        border: Border(
+                            bottom:
+                                BorderSide(color: Colors.black38, width: 2))),
+                    child: Text(
+                      "Ultimas Postagens",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      child: new ListView.builder(
+                          itemCount: listPostagens.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                                child: Container(
+                                  width: double.maxFinite,
+                                  height: 200,
+                                  margin: EdgeInsets.only(
+                                      top: 10, bottom: 10, left: 25, right: 25),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black12),
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 2,
+                                        blurRadius: 3,
+                                        offset: Offset(
+                                            0, 3), // changes position of shadow
                                       ),
-                                      child: Image.network(
-                                        "https://secure-temple-09752.herokuapp.com" + listPostagens[index].imgPostagem,
-                                        fit: BoxFit.fitWidth,
-                                        // image: AssetImage(
-                                        //     'assets/imgPosts/AUTOCONHECIMENTO.jpg'),
-                                        height: 110,
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 20, top: 20),
-                                          child: Text(
-                                            listPostagens[index].title,
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
+                                    ],
+                                  ),
+                                  child: Center(
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                              ),
+                                            ),
+                                            child: Image.network(
+                                              "https://secure-temple-09752.herokuapp.com" +
+                                                  listPostagens[index]
+                                                      .imgPostagem,
+                                              fit: BoxFit.fitWidth,
+                                              // image: AssetImage(
+                                              //     'assets/imgPosts/AUTOCONHECIMENTO.jpg'),
+                                              height: 110,
+                                            ),
                                           ),
-                                        ),
-                                        // Padding(
-                                        //   padding: EdgeInsets.only(
-                                        //     right: 20,
-                                        //   ),
-                                        //   child: Chip(
-                                        //       label: Text(
-                                        //         "Auto Conhecimento",
-                                        //         style: TextStyle(
-                                        //             color: Colors.white,
-                                        //             fontWeight: FontWeight.bold,
-                                        //             fontSize: 12),
-                                        //       ),
-                                        //       backgroundColor:
-                                        //           Colors.lightGreen[600]),
-                                        // )
-                                      ],
-                                    ),
-                                    Padding(
-                                        padding:
-                                            EdgeInsets.only(left: 20, top: 10),
-                                        child: Text("12 de set. 2020",
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle()))
-                                  ]),
-                            ),
-                          ),
-                          onTap: () {
-                            // Navigator.pushNamed(context, '/postagem', arguments: "auto-conhecimento");
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Perguntas(
-                                      id: listPostagens[index].id,
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 20, top: 20),
+                                                child: Container(
+                                                  width: (MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.75),
+                                                  child: AutoSizeText(
+                                                    listPostagens[index].title,
+                                                    maxLines: 2,
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ),
+                                              // Padding(
+                                              //   padding: EdgeInsets.only(
+                                              //     right: 20,
+                                              //   ),
+                                              //   child: Chip(
+                                              //       label: Text(
+                                              //         "Auto Conhecimento",
+                                              //         style: TextStyle(
+                                              //             color: Colors.white,
+                                              //             fontWeight: FontWeight.bold,
+                                              //             fontSize: 12),
+                                              //       ),
+                                              //       backgroundColor:
+                                              //           Colors.lightGreen[600]),
+                                              // )
+                                            ],
+                                          ),
+                                          Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 20, top: 10),
+                                              child: Text("12 de set. 2020",
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle()))
+                                        ]),
+                                  ),
+                                ),
+                                onTap: () {
+                                  // Navigator.pushNamed(context, '/postagem', arguments: "auto-conhecimento");
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Perguntas(
+                                        id: listPostagens[index].id,
                                         argument: listPostagens[index].title,
-                                        image: listPostagens[index].imgPostagem,),),);
-                          });
-                    }),
+                                        image: listPostagens[index].imgPostagem,
+                                      ),
+                                    ),
+                                  );
+                                });
+                          }),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }

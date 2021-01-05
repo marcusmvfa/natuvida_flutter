@@ -34,6 +34,7 @@ class _PerguntasState extends State<Perguntas>
   Animation rotation;
   List<PostagemDetalheModel> conteudo = new List<PostagemDetalheModel>();
   SharedPreferences prefs;
+  bool isLoading = false;
 
   PlayerState _playerState;
   YoutubeMetaData _videoMetaData;
@@ -291,6 +292,7 @@ class _PerguntasState extends State<Perguntas>
     try {
       var response = await http.get(
           "https://secure-temple-09752.herokuapp.com/getPostagemDetalhes?id=" +
+          // "http://192.168.0.117:3000/getPostagemDetalhes?id=" +
               widget.id.toString());
       List list = json.decode(response.body);
       List<PostagemDetalheModel> listDetalehs =
@@ -301,6 +303,7 @@ class _PerguntasState extends State<Perguntas>
       });
       setState(() {
         conteudo = listDetalehs;
+        isLoading = false;
       });
     } catch (e) {
       print(e);
@@ -310,7 +313,7 @@ class _PerguntasState extends State<Perguntas>
   Future postRespostas() async {
     var fin = json.encode(respostas);
     print(fin);
-    var response = await http.post("https://secure-temple-09752.herokuapp.com/postRespostas",
+    var resp = await http.post("https://secure-temple-09752.herokuapp.com/postRespostas",
         body: fin,
         headers: {'Content-type': 'application/json'}).then((response) {
       if (response.statusCode == 200) {
@@ -331,6 +334,9 @@ class _PerguntasState extends State<Perguntas>
   @override
   void initState() {
     // TODO: implement initState
+    setState((){
+isLoading = true;
+    });
     super.initState();
     _rotationController =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
@@ -371,6 +377,7 @@ class _PerguntasState extends State<Perguntas>
           //   size: Size(380, 625),
           //   painter: RPSCustomPainter(),
           //   child:
+          isLoading ? Center(child:CircularProgressIndicator()):
           SingleChildScrollView(
         child: Center(
           child: Column(

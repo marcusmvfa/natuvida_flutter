@@ -99,9 +99,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           Icon(Icons.arrow_forward_ios, color: Colors.white,)
                         ]),),
                   ),
-                  Center(
+                  (MediaQuery.of(context).size.height < 550) 
+                  ? Container()
+                  :Center(
                     child: Container(
-                        height: 200,
+                        // height: 200,
+                        height: (MediaQuery.of(context).size.height * 0.2),
                         child: Image.asset(
                           'assets/natuvida_logo.png',
                           color: Colors.white,
@@ -109,7 +112,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         )),
                   ),
                   Container(
-                    height: 400,
+                    // height: 400,
+                    height: (MediaQuery.of(context).size.height * 0.55),
                     child: PageView(
                       physics: ClampingScrollPhysics(),
                       controller: _pageController,
@@ -120,7 +124,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       },
                       children: <Widget>[
                         Padding(
-                          padding: EdgeInsets.all(40),
+                          padding: EdgeInsets.all(30),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -210,15 +214,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               // crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
-                                  height: 30,
+                                  // height: 30,
+                                  height: (MediaQuery.of(context).size.height * 0.03),
                                 ),
-                                Text(
+                                Container(child: Text(
                                   "Você realmente parece estar interessado (a) em mudanças.\nVocê está preparado para iniciar um desenvolvimento pessoal juntamente com seu trabalho?",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
-                                ),
+                                ),),
                                 SizedBox(
                                   height: 20,
                                 ),
@@ -263,12 +268,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(40),
+                          padding: EdgeInsets.all(30),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                height: 30,
+                                height: (MediaQuery.of(context).size.height < 550) ? 0 : 30,
                               ),
                               Text(
                                 "Antes de começar o primeiro tema, gostaria de lembrar que você é a pessoa que melhor conhece a si mesmo.\nPor isso, juntos podemos desenvolver mudanças importantes, basta você querer e colocar em prática.",

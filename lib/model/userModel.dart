@@ -13,7 +13,7 @@ class UserModel {
       login: json['login'] as String,
       nome: json['nome'] as String,
       email: json['email'] as String,
-      telefone: json['telefone'] as String,
+      telefone: json['fone'] as String,
     );
   }
 }
