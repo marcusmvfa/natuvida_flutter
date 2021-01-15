@@ -51,8 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         // resizeToAvoidBottomPadding: false,
         body: SingleChildScrollView(
           child: Container(
@@ -156,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
             }),
           ),
         ),
-      ),
+      
     );
   }
 }

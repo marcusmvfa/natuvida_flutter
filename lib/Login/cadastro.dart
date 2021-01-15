@@ -65,6 +65,10 @@ class _CadastroScreenState extends State<CadastroScreen> {
     return SafeArea(
       child: Scaffold(
         // resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
         body: Container(
           padding: EdgeInsets.only(bottom: 20),
           child: SingleChildScrollView(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:natuvida_flutter/Perfil/perfil.dart';
 import 'package:natuvida_flutter/Postagem/perguntas.dart';
 import 'package:natuvida_flutter/Services/requests.dart' as Requests;
 import 'package:natuvida_flutter/model/postagemDetalheModel.dart';
@@ -133,7 +134,9 @@ class _HomeState extends State<Home> {
                 child: Text("Perfil"),
               ),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PerfilView()));
               },
             ),
             ListTile(

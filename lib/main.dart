@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Natuvida',
+        title: 'Bussiness Capacitation',
         initialRoute: '/',
         routes: {
           // '/': (context) => Home(),
