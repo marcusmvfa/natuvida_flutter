@@ -27,10 +27,12 @@ class _PerfilViewState extends State<PerfilView> {
       this.prefs = preferences;
       // nameController.text = await prefs.getString()
       var decode1 = jsonDecode(prefs.getString("userData"));
+      // var decode2 = jsonDecode(decode1);
+
       user = UserModel.fromJson(decode1);
       nameController.text = decode1["nome"];
       emailController.text = decode1["email"];
-      phoneController.text = decode1["telefone"];
+      phoneController.text = decode1["fone"];
       print("eita");
     });
   }

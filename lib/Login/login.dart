@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
       "senha": controllerSenha.text
     }).then((response) {
       if (response.statusCode == 200 && response.body != "null") {
-        prefs.setString("userData", json.encode(response.body));
+        prefs.setString("userData", response.body);
         prefs.setBool("isLogged", true);
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (BuildContext context) => Home()));

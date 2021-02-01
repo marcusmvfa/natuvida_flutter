@@ -6,6 +6,7 @@ class PostagemDetalheModel {
   String video;
   final String img;
   final String title;
+  int index;
   final List multipla;
   
   PostagemDetalheModel({ this.id, this.texto, this.flPergunta, this.respostaText, this.video, this.img, this.title, this.multipla});

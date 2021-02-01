@@ -1,13 +1,16 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:natuvida_flutter/model/postagemDetalheModel.dart';
 import 'package:natuvida_flutter/model/userModel.dart';
 import 'package:natuvida_flutter/Postagem/Finalizar.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:natuvida_flutter/Services/requests.dart' as Requests;
 
 class Perguntas extends StatefulWidget {
   final String id;
@@ -47,9 +50,10 @@ class _PerguntasState extends State<Perguntas>
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   void _geraPerguntas() {
-    var userDataJson = jsonDecode(prefs.getString("userData"));
+    var userDataJson = prefs.getString("userData");
     var decoded = jsonDecode(userDataJson);
     var userData = UserModel.fromJson(decoded);
+    // var respostasDecode = jsonDecode(prefs.getString("respostas"));
     this.conteudo.forEach((element) {
       this.respostas.add(
           {"idPergunta": element.id, "idUsuario": userData.id, "valor": ""});
@@ -63,6 +67,8 @@ class _PerguntasState extends State<Perguntas>
         this.respostas[questionIndex]["valor"] = respostaController.text != ""
             ? respostaController.text
             : this.respostas[questionIndex]["valor"];
+
+        setRespostasPreferences(this.respostas);
 
         questionIndex++;
         questionText = conteudo[questionIndex].texto;
@@ -290,10 +296,7 @@ class _PerguntasState extends State<Perguntas>
 
   Future getPostagemDetalhes() async {
     try {
-      var response = await http.get(
-          "https://secure-temple-09752.herokuapp.com/getPostagemDetalhes?id=" +
-          // "http://192.168.0.117:3000/getPostagemDetalhes?id=" +
-              widget.id.toString());
+      var response = await Requests.getPostagemDetalhes(widget.id.toString());
       List list = json.decode(response.body);
       List<PostagemDetalheModel> listDetalehs =
           new List<PostagemDetalheModel>();
@@ -313,7 +316,8 @@ class _PerguntasState extends State<Perguntas>
   Future postRespostas() async {
     var fin = json.encode(respostas);
     print(fin);
-    var resp = await http.post("https://secure-temple-09752.herokuapp.com/postRespostas",
+    var resp = await http.post(
+        "https://secure-temple-09752.herokuapp.com/postRespostas",
         body: fin,
         headers: {'Content-type': 'application/json'}).then((response) {
       if (response.statusCode == 200) {
@@ -331,11 +335,54 @@ class _PerguntasState extends State<Perguntas>
     prefs = await SharedPreferences.getInstance();
   }
 
+  _launchURL() async {
+    if (Platform.isIOS) {
+      if (await canLaunch(
+          'youtube://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw')) {
+        await launch(
+            'youtube://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw',
+            forceSafariVC: false);
+      } else {
+        if (await canLaunch(
+            'https://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw')) {
+          await launch(
+              'https://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw');
+        } else {
+          throw 'Could not launch https://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw';
+        }
+      }
+    } else {
+      const url = 'https://www.youtube.com/channel/UCwXdFgeE9KYzlDdR7TG9cMw';
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+  }
+
+  setRespostasPreferences(listRespostas){
+    var strRespostas = "";
+    var tes = listRespostas.toString();
+    List ks = new List();
+    listRespostas.forEach((el) {
+      var js =  {
+        "idPergunta" : el["idPergunta"],
+        "idUsuario" : el["idUsuario"],
+        "valor": el["valor"]
+      };
+        ks.add(js);
+    });
+    var s = jsonEncode(ks);
+
+    prefs.setString("respostas", s);
+  }
+
   @override
   void initState() {
     // TODO: implement initState
-    setState((){
-isLoading = true;
+    setState(() {
+      isLoading = true;
     });
     super.initState();
     _rotationController =
@@ -366,7 +413,7 @@ isLoading = true;
         title: Container(
           width: 250,
           child: Text(
-            "Natuvida",
+            "Business Capacitation",
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.black),
           ),
@@ -377,234 +424,254 @@ isLoading = true;
           //   size: Size(380, 625),
           //   painter: RPSCustomPainter(),
           //   child:
-          isLoading ? Center(child:CircularProgressIndicator()):
-          SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: questionIndex > 0
-                        ? IconButton(
-                            icon: Icon(
-                              Icons.arrow_back_ios,
+          isLoading
+              ? Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(10),
+                              child: questionIndex > 0
+                                  ? IconButton(
+                                      icon: Icon(
+                                        Icons.arrow_back_ios,
+                                      ),
+                                      onPressed: () {
+                                        if (_youtubePlayerController != null) {
+                                          _youtubePlayerController = null;
+                                        }
+                                        _buttonRetrocerder();
+                                      },
+                                    )
+                                  : Container(),
                             ),
-                            onPressed: () {
-                              if (_youtubePlayerController != null) {
-                                _youtubePlayerController = null;
-                              }
-                              _buttonRetrocerder();
-                            },
-                          )
-                        : Container(),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 15, top: 15),
-                    child: Chip(
-                        label: Text(
-                          widget.argument,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12),
-                        ),
-                        backgroundColor: Colors.lightGreen[600]),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: questionIndex < conteudo.length - 1
-                        ? IconButton(
-                            icon: Icon(
-                              Icons.arrow_forward_ios,
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 15, top: 15),
+                              child: Chip(
+                                  label: Text(
+                                    widget.argument ?? "",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12),
+                                  ),
+                                  backgroundColor: Colors.lightGreen[100]),
                             ),
-                            onPressed: () {
-                              if (_rotationController.isCompleted) {
-                                _rotationController.value = 0;
-                                _rotationController.forward();
-                              }
-                              setState(() {
-                                if (_youtubePlayerController != null) {
-                                  _youtubePlayerController = null;
-                                }
-                              });
-
-                              _buttonAvancar();
-                            },
-                          )
-                        : Container(),
-                  ),
-                ],
-              ),
-
-              Wrap(children: [
-                Center(
-                  child: Padding(
-                    padding: conteudo.length > 0 &&
-                            conteudo[questionIndex] != null &&
-                            conteudo[questionIndex].title != null
-                        ? EdgeInsets.all(20)
-                        : EdgeInsets.all(0),
-                    child: Text(
-                      conteudo.length > 0 &&
-                              conteudo[questionIndex] != null &&
-                              conteudo[questionIndex].title != null
-                          ? conteudo[questionIndex].title
-                          : "",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                Center(
-                  child: RotationTransition(
-                    turns: rotation,
-                    child: Container(
-                      margin: EdgeInsets.only(left: 30, right: 30, bottom: 20),
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.black12),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.red[50],
-                                blurRadius: 20,
-                                spreadRadius: 1,
-                                offset: Offset(7, 7))
-                          ]),
-                      child: Text(
-                        questionText,
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                  ),
-                ),
-              ]),
-              (conteudo.length > 0 &&
-                      conteudo[questionIndex] != null &&
-                      conteudo[questionIndex].video != null &&
-                      conteudo[questionIndex].video != "")
-                  ? Container(
-                      margin: EdgeInsets.only(right: 20, left: 20),
-                      height: 300,
-                      child: YoutubePlayerBuilder(
-                        // onExitFullScreen: () {
-                        //   // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
-                        //   SystemChrome.setPreferredOrientations(
-                        //       DeviceOrientation.values);
-                        // },
-                        player: YoutubePlayer(
-                          controller: _youtubePlayerController,
-                          showVideoProgressIndicator: true,
-                          progressIndicatorColor: Colors.red,
-                          topActions: <Widget>[
-                            const SizedBox(width: 8.0),
-                            Expanded(
-                              child: Text(
-                                _youtubePlayerController != null
-                                    ? _youtubePlayerController.metadata.title
-                                    : "",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18.0,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 15, top: 15),
+                              child: Chip(label: Text(
+                                (questionIndex + 1).toString()+ '/' + conteudo.length.toString()
+                              ),
+                              backgroundColor: Colors.white,
                               ),
                             ),
+                            Padding(
+                              padding: EdgeInsets.all(10),
+                              child: questionIndex < conteudo.length - 1
+                                  ? IconButton(
+                                      icon: Icon(
+                                        Icons.arrow_forward_ios,
+                                      ),
+                                      onPressed: () {
+                                        if (_rotationController.isCompleted) {
+                                          _rotationController.value = 0;
+                                          _rotationController.forward();
+                                        }
+                                        setState(() {
+                                          if (_youtubePlayerController !=
+                                              null) {
+                                            _youtubePlayerController = null;
+                                          }
+                                        });
+
+                                        _buttonAvancar();
+                                      },
+                                    )
+                                  : Container(),
+                            ),
                           ],
-                          onReady: () {
-                            _isPlayerReady = true;
-                          },
                         ),
-                        builder: (context, player) => Scaffold(
-                          key: _scaffoldKey,
-                          body: ListView(
-                            children: [
-                              player,
-                            ],
+
+                        Wrap(children: [
+                          Center(
+                            child: Padding(
+                              padding: conteudo.length > 0 &&
+                                      conteudo[questionIndex] != null &&
+                                      conteudo[questionIndex].title != null
+                                  ? EdgeInsets.all(20)
+                                  : EdgeInsets.all(0),
+                              child: Text(
+                                conteudo.length > 0 &&
+                                        conteudo[questionIndex] != null &&
+                                        conteudo[questionIndex].title != null
+                                    ? conteudo[questionIndex].title
+                                    : "",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
+                          Center(
+                            child: RotationTransition(
+                              turns: rotation,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    left: 30, right: 30, bottom: 20),
+                                padding: EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: Colors.black12),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.red[50],
+                                          blurRadius: 20,
+                                          spreadRadius: 1,
+                                          offset: Offset(7, 7))
+                                    ]),
+                                child: Text(
+                                  questionText,
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ]),
+                        (conteudo.length > 0 &&
+                                conteudo[questionIndex] != null &&
+                                conteudo[questionIndex].video != null &&
+                                conteudo[questionIndex].video != "")
+                            ? Container(
+                                margin: EdgeInsets.only(right: 20, left: 20),
+                                height: 300,
+                                child: YoutubePlayerBuilder(
+                                  // onExitFullScreen: () {
+                                  //   // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
+                                  //   SystemChrome.setPreferredOrientations(
+                                  //       DeviceOrientation.values);
+                                  // },
+                                  player: YoutubePlayer(
+                                    controller: _youtubePlayerController,
+                                    showVideoProgressIndicator: true,
+                                    progressIndicatorColor: Colors.red,
+                                    topActions: <Widget>[
+                                      const SizedBox(width: 8.0),
+                                      Expanded(
+                                        child: Text(
+                                          _youtubePlayerController != null
+                                              ? _youtubePlayerController
+                                                  .metadata.title
+                                              : "",
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18.0,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ],
+                                    onReady: () {
+                                      _isPlayerReady = true;
+                                    },
+                                    bottomActions: [
+                                      RaisedButton(onPressed: () => launch)
+                                    ],
+                                  ),
+                                  builder: (context, player) => Scaffold(
+                                    key: _scaffoldKey,
+                                    body: ListView(
+                                      children: [
+                                        player,
+                                      ],
+                                    ),
+                                  ),
+                                ))
+                            : Container(),
+                        (conteudo.length > 0 &&
+                                conteudo[questionIndex] != null &&
+                                conteudo[questionIndex].img != null)
+                            ? Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30)),
+                                margin: EdgeInsets.only(right: 30, left: 30),
+                                child: Image(
+                                  image:
+                                      AssetImage('assets/divertidamente.png'),
+                                ),
+                              )
+                            : Container(),
+                        factoryEscolhas(),
+                        (conteudo.length > 0 &&
+                                conteudo[questionIndex] != null &&
+                                conteudo[questionIndex].respostaText)
+                            ? Container(
+                                margin: EdgeInsets.all(40),
+                                child: TextField(
+                                  controller: respostaController,
+                                  decoration: InputDecoration(
+                                      // filled: true,
+                                      // fillColor: Color(0x22cffdcd),
+                                      border: OutlineInputBorder(),
+                                      labelText: 'Resposta...'),
+                                  maxLines: 2,
+                                ),
+                              )
+                            : Container(),
+                        // Spacer(),
+                        Container(
+                          width: double.maxFinite,
+                          margin:
+                              EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                          padding: EdgeInsets.all(20),
+                          child: questionIndex < conteudo.length - 1
+                              ? RaisedButton(
+                                  color: Colors.red[50],
+                                  padding: EdgeInsets.all(10),
+                                  child: Text(
+                                    "Avançar",
+                                    style: TextStyle(
+                                        color: Colors.black87, fontSize: 18),
+                                  ),
+                                  onPressed: () {
+                                    if (_rotationController.isCompleted) {
+                                      _rotationController.value = 0;
+                                      _rotationController.forward();
+                                    }
+                                    _buttonAvancar();
+                                  },
+                                )
+                              : RaisedButton(
+                                  color: Colors.green,
+                                  padding: EdgeInsets.all(10),
+                                  child: Text(
+                                    "Finalizar",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
+                                  ),
+                                  onPressed: () {
+                                    if (conteudo.length - 1 == questionIndex) {
+                                      respostas[questionIndex]["valor"] =
+                                          respostaController.text != ""
+                                              ? respostaController.text
+                                              : respostas[questionIndex]
+                                                  ["valor"];
+                                    }
+                                    postRespostas();
+                                  },
+                                ),
                         ),
-                      ))
-                  : Container(),
-              (conteudo.length > 0 &&
-                      conteudo[questionIndex] != null &&
-                      conteudo[questionIndex].img != null)
-                  ? Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30)),
-                      margin: EdgeInsets.only(right: 30, left: 30),
-                      child: Image(
-                        image: AssetImage('assets/divertidamente.png'),
-                      ),
-                    )
-                  : Container(),
-              factoryEscolhas(),
-              (conteudo.length > 0 &&
-                      conteudo[questionIndex] != null &&
-                      conteudo[questionIndex].respostaText)
-                  ? Container(
-                      margin: EdgeInsets.all(40),
-                      child: TextField(
-                        controller: respostaController,
-                        decoration: InputDecoration(
-                            // filled: true,
-                            // fillColor: Color(0x22cffdcd),
-                            border: OutlineInputBorder(),
-                            labelText: 'Resposta...'),
-                        maxLines: 2,
-                      ),
-                    )
-                  : Container(),
-              // Spacer(),
-              Container(
-                width: double.maxFinite,
-                margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
-                padding: EdgeInsets.all(20),
-                child: questionIndex < conteudo.length - 1
-                    ? RaisedButton(
-                        color: Colors.red[50],
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          "Avançar",
-                          style: TextStyle(color: Colors.black87, fontSize: 18),
-                        ),
-                        onPressed: () {
-                          if (_rotationController.isCompleted) {
-                            _rotationController.value = 0;
-                            _rotationController.forward();
-                          }
-                          _buttonAvancar();
-                        },
-                      )
-                    : RaisedButton(
-                        color: Colors.green,
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          "Finalizar",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                        onPressed: () {
-                          if (conteudo.length - 1 == questionIndex) {
-                            respostas[questionIndex]["valor"] =
-                                respostaController.text != ""
-                                    ? respostaController.text
-                                    : respostas[questionIndex]["valor"];
-                          }
-                          postRespostas();
-                        },
-                      ),
-              ),
-            ],
-          ),
-        ),
-      ),
+                      ],
+                    ),
+                  ),
+                ),
       // ),
     );
   }
