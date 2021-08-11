@@ -3,6 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:natuvida_flutter/Controllers/PerguntasController.dart';
+import 'package:natuvida_flutter/Controllers/PostagemController.dart';
 import 'package:natuvida_flutter/model/postagemDetalheModel.dart';
 import 'package:natuvida_flutter/model/userModel.dart';
 import 'package:natuvida_flutter/Postagem/Finalizar.dart';
@@ -48,6 +51,8 @@ class _PerguntasState extends State<Perguntas>
   YoutubePlayerController _youtubePlayerController;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
+  PerguntasController perguntasController;
 
   void _geraPerguntas() {
     var userDataJson = prefs.getString("userData");
@@ -114,48 +119,7 @@ class _PerguntasState extends State<Perguntas>
     }
   }
 
-  Future<String> _loadFromAsset() async {
-    return await rootBundle
-        .loadString("assets/Auto-Conhecimento-Conteudo.json");
-  }
-
   Future parseJson() async {
-    // String jsonString = await _loadFromAsset();
-    // var jsonString = widget.postagemDetalhes[0];
-    // var jsonString = conteudo[0];
-    // print(jsonString);
-    // String jsonString = widget.argument;
-    // switch (widget.argument) {
-    //   case 'auto-conhecimento':
-    //     jsonString = await rootBundle
-    //         .loadString("assets/Auto-Conhecimento-Conteudo.json");
-    //     break;
-
-    //   case 'emocoes':
-    //     jsonString = await rootBundle
-    //         .loadString("assets/Emocoes_e_cinco_linguagens_do_amor.json");
-    //     break;
-
-    //   case 'maslow':
-    //     jsonString =
-    //         await rootBundle.loadString("assets/Piramide_de_Maslow.json");
-    //     break;
-
-    //   case 'mindset':
-    //     jsonString = await rootBundle.loadString("assets/MindSet.json");
-    //     break;
-
-    //   case 'desafio':
-    //     jsonString = await rootBundle.loadString("assets/DESAFIO.json");
-    //     break;
-    // }
-    // final jsonResponse = jsonDecode(jsonString) as List;
-    // conteudo = jsonResponse.map((e) => PostagemDetalheModel.fromJson(e)).toList();
-
-    // conteudo = jsonString;
-
-    // .map((data) => PostagemModel.fromJson(data))
-    // .toList();
     if (conteudo.length > 0 &&
         conteudo[questionIndex].video != null &&
         conteudo[questionIndex].video != "") {
@@ -176,73 +140,52 @@ class _PerguntasState extends State<Perguntas>
     _geraPerguntas();
   }
 
-  Widget _text(String title, String value) {
-    return RichText(
-      text: TextSpan(
-        text: '$title : ',
-        style: const TextStyle(
-          color: Colors.blueAccent,
-          fontWeight: FontWeight.bold,
-        ),
-        children: [
-          TextSpan(
-            text: value ?? '',
-            style: const TextStyle(
-              color: Colors.blueAccent,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget factoryEscolhas() {
-    if (conteudo.length > 0) {
-      if (conteudo[questionIndex].flPergunta == true &&
-          conteudo[questionIndex].respostaText == false &&
-          conteudo[questionIndex].multipla == null) {
+    if (perguntasController.conteudo.value.length > 0) {
+      if (perguntasController.conteudo.value[perguntasController.questionIndex.value].flPergunta == true &&
+          perguntasController.conteudo.value[perguntasController.questionIndex.value].respostaText == false &&
+          perguntasController.conteudo.value[perguntasController.questionIndex.value].multipla == null) {
         return Container(
           child: Column(children: [
             RaisedButton(
-              color: respostas[questionIndex]["valor"] == "sim"
+              color: perguntasController.respostas.value[perguntasController.questionIndex.value]["valor"] == "sim"
                   ? Colors.green
                   : Colors.white,
               child: Text(
                 "Sim",
                 style: TextStyle(
-                    color: respostas[questionIndex]["valor"] == "sim"
+                    color: perguntasController.respostas.value[perguntasController.questionIndex.value]["valor"] == "sim"
                         ? Colors.white
                         : Colors.black),
               ),
               onPressed: () {
                 setState(() {
-                  respostas[questionIndex]["valor"] = "sim";
+                  perguntasController.respostas.value[perguntasController.questionIndex.value]["valor"] = "sim";
                 });
               },
             ),
             RaisedButton(
-              color: respostas[questionIndex]["valor"] == "nao"
+              color: perguntasController.respostas.value[perguntasController.questionIndex.value]["valor"] == "nao"
                   ? Colors.red
                   : Colors.white,
               child: Text("Não",
                   style: TextStyle(
-                      color: respostas[questionIndex]["valor"] == "nao"
+                      color: perguntasController.respostas.value[perguntasController.questionIndex.value]["valor"] == "nao"
                           ? Colors.white
                           : Colors.black)),
               onPressed: () {
                 setState(() {
-                  respostas[questionIndex]["valor"] = "nao";
+                  perguntasController.respostas.value[perguntasController.questionIndex.value]["valor"] = "nao";
                 });
               },
             ),
           ]),
         );
-      } else if (conteudo[questionIndex].flPergunta == true &&
-          conteudo[questionIndex].respostaText == false &&
-          conteudo[questionIndex].multipla != null &&
-          conteudo[questionIndex].multipla.length > 0) {
-        List escolhas = conteudo[questionIndex].multipla;
+      } else if (perguntasController.conteudo.value[perguntasController.questionIndex.value].flPergunta == true &&
+          perguntasController.conteudo.value[perguntasController.questionIndex.value].respostaText == false &&
+          perguntasController.conteudo.value[perguntasController.questionIndex.value].multipla != null &&
+          perguntasController.conteudo.value[perguntasController.questionIndex.value].multipla.length > 0) {
+        List escolhas = perguntasController.conteudo.value[perguntasController.questionIndex.value].multipla;
         return ListView.builder(
           shrinkWrap: true,
           itemCount: escolhas.length,
@@ -255,7 +198,7 @@ class _PerguntasState extends State<Perguntas>
                 margin:
                     EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25),
                 decoration: BoxDecoration(
-                    color: respostas[questionIndex]["valor"] == escolhas[index]
+                    color: perguntasController.respostas.value[perguntasController.questionIndex.value]["valor"] == escolhas[index]
                         ? Colors.green
                         : Colors.white,
                     border: Border.all(color: Colors.black12),
@@ -272,7 +215,7 @@ class _PerguntasState extends State<Perguntas>
                     escolhas[index].toString(),
                     style: TextStyle(
                       color:
-                          respostas[questionIndex]["valor"] == escolhas[index]
+                          perguntasController.respostas.value[perguntasController.questionIndex.value]["valor"] == escolhas[index]
                               ? Colors.white
                               : Colors.black,
                     ),
@@ -281,7 +224,7 @@ class _PerguntasState extends State<Perguntas>
               ),
               onTap: () {
                 setState(() {
-                  respostas[questionIndex]["valor"] =
+                  perguntasController.respostas.value[perguntasController.questionIndex.value]["valor"] =
                       escolhas[index].toString();
                 });
               },
@@ -361,17 +304,17 @@ class _PerguntasState extends State<Perguntas>
     }
   }
 
-  setRespostasPreferences(listRespostas){
+  setRespostasPreferences(listRespostas) {
     var strRespostas = "";
     var tes = listRespostas.toString();
     List ks = new List();
     listRespostas.forEach((el) {
-      var js =  {
-        "idPergunta" : el["idPergunta"],
-        "idUsuario" : el["idUsuario"],
+      var js = {
+        "idPergunta": el["idPergunta"],
+        "idUsuario": el["idUsuario"],
         "valor": el["valor"]
       };
-        ks.add(js);
+      ks.add(js);
     });
     var s = jsonEncode(ks);
 
@@ -391,6 +334,9 @@ class _PerguntasState extends State<Perguntas>
     rotation = Tween(begin: 0.0, end: 2.0).animate(_rotationController);
     _videoMetaData = const YoutubeMetaData();
     _playerState = PlayerState.unknown;
+    perguntasController = Get.put(PerguntasController(), permanent: false);
+    perguntasController.id = widget.id;
+    perguntasController.instantiateController();
     getPostagemDetalhes().then((value) async {
       await getPrefs();
       parseJson();
@@ -406,8 +352,11 @@ class _PerguntasState extends State<Perguntas>
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
+          brightness: Brightness.light,
+
         backgroundColor: Colors.white,
         iconTheme: new IconThemeData(color: Colors.black),
         title: Container(
@@ -424,7 +373,7 @@ class _PerguntasState extends State<Perguntas>
           //   size: Size(380, 625),
           //   painter: RPSCustomPainter(),
           //   child:
-          isLoading
+          Obx(() => perguntasController.isLoading.value
               ? Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
                   child: Center(
@@ -435,14 +384,14 @@ class _PerguntasState extends State<Perguntas>
                           children: [
                             Padding(
                               padding: EdgeInsets.all(10),
-                              child: questionIndex > 0
+                              child: perguntasController.questionIndex.value > 0
                                   ? IconButton(
                                       icon: Icon(
                                         Icons.arrow_back_ios,
                                       ),
                                       onPressed: () {
-                                        if (_youtubePlayerController != null) {
-                                          _youtubePlayerController = null;
+                                        if (perguntasController.youtubePlayerController != null) {
+                                          perguntasController.youtubePlayerController = null;
                                         }
                                         _buttonRetrocerder();
                                       },
@@ -463,15 +412,16 @@ class _PerguntasState extends State<Perguntas>
                             ),
                             Padding(
                               padding: EdgeInsets.only(bottom: 15, top: 15),
-                              child: Chip(label: Text(
-                                (questionIndex + 1).toString()+ '/' + conteudo.length.toString()
-                              ),
-                              backgroundColor: Colors.white,
+                              child: Chip(
+                                label: Text((perguntasController.questionIndex.value + 1).toString() +
+                                    '/' +
+                                    conteudo.length.toString()),
+                                backgroundColor: Colors.white,
                               ),
                             ),
                             Padding(
                               padding: EdgeInsets.all(10),
-                              child: questionIndex < conteudo.length - 1
+                              child: perguntasController.questionIndex.value < perguntasController.conteudo.value.length - 1
                                   ? IconButton(
                                       icon: Icon(
                                         Icons.arrow_forward_ios,
@@ -482,13 +432,13 @@ class _PerguntasState extends State<Perguntas>
                                           _rotationController.forward();
                                         }
                                         setState(() {
-                                          if (_youtubePlayerController !=
+                                          if (perguntasController.youtubePlayerController !=
                                               null) {
-                                            _youtubePlayerController = null;
+                                            perguntasController.youtubePlayerController = null;
                                           }
                                         });
 
-                                        _buttonAvancar();
+                                        perguntasController.buttonAvancar();
                                       },
                                     )
                                   : Container(),
@@ -499,16 +449,16 @@ class _PerguntasState extends State<Perguntas>
                         Wrap(children: [
                           Center(
                             child: Padding(
-                              padding: conteudo.length > 0 &&
-                                      conteudo[questionIndex] != null &&
-                                      conteudo[questionIndex].title != null
+                              padding: perguntasController.conteudo.value.length > 0 &&
+                                      perguntasController.conteudo.value[perguntasController.questionIndex.value] != null &&
+                                      perguntasController.conteudo.value[perguntasController.questionIndex.value].title != null
                                   ? EdgeInsets.all(20)
                                   : EdgeInsets.all(0),
                               child: Text(
-                                conteudo.length > 0 &&
-                                        conteudo[questionIndex] != null &&
-                                        conteudo[questionIndex].title != null
-                                    ? conteudo[questionIndex].title
+                                perguntasController.conteudo.value.length > 0 &&
+                                        perguntasController.conteudo.value[perguntasController.questionIndex.value] != null &&
+                                        perguntasController.conteudo.value[perguntasController.questionIndex.value].title != null
+                                    ? perguntasController.conteudo.value[perguntasController.questionIndex.value].title
                                     : "",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -537,17 +487,17 @@ class _PerguntasState extends State<Perguntas>
                                           offset: Offset(7, 7))
                                     ]),
                                 child: Text(
-                                  questionText,
+                                  perguntasController.questionText.value,
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ),
                             ),
                           ),
                         ]),
-                        (conteudo.length > 0 &&
-                                conteudo[questionIndex] != null &&
-                                conteudo[questionIndex].video != null &&
-                                conteudo[questionIndex].video != "")
+                        (perguntasController.conteudo.value.length > 0 &&
+                                perguntasController.conteudo.value[perguntasController.questionIndex.value] != null &&
+                                perguntasController.conteudo.value[perguntasController.questionIndex.value].video != null &&
+                                perguntasController.conteudo.value[perguntasController.questionIndex.value].video != "")
                             ? Container(
                                 margin: EdgeInsets.only(right: 20, left: 20),
                                 height: 300,
@@ -558,15 +508,15 @@ class _PerguntasState extends State<Perguntas>
                                   //       DeviceOrientation.values);
                                   // },
                                   player: YoutubePlayer(
-                                    controller: _youtubePlayerController,
+                                    controller: perguntasController.youtubePlayerController,
                                     showVideoProgressIndicator: true,
                                     progressIndicatorColor: Colors.red,
                                     topActions: <Widget>[
                                       const SizedBox(width: 8.0),
                                       Expanded(
                                         child: Text(
-                                          _youtubePlayerController != null
-                                              ? _youtubePlayerController
+                                          perguntasController.youtubePlayerController != null
+                                              ? perguntasController.youtubePlayerController
                                                   .metadata.title
                                               : "",
                                           style: const TextStyle(
@@ -595,23 +545,23 @@ class _PerguntasState extends State<Perguntas>
                                   ),
                                 ))
                             : Container(),
-                        (conteudo.length > 0 &&
-                                conteudo[questionIndex] != null &&
-                                conteudo[questionIndex].img != null)
+                        (perguntasController.conteudo.value.length > 0 &&
+                                perguntasController.conteudo.value[perguntasController.questionIndex.value] != null &&
+                                perguntasController.conteudo.value[perguntasController.questionIndex.value].img != null)
                             ? Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30)),
                                 margin: EdgeInsets.only(right: 30, left: 30),
                                 child: Image(
                                   image:
-                                      AssetImage('assets/divertidamente.png'),
+                                      AssetImage('assets' + perguntasController.conteudo.value[perguntasController.questionIndex.value].img + '.png'),
                                 ),
                               )
                             : Container(),
                         factoryEscolhas(),
-                        (conteudo.length > 0 &&
-                                conteudo[questionIndex] != null &&
-                                conteudo[questionIndex].respostaText)
+                        (perguntasController.conteudo.value.length > 0 &&
+                                perguntasController.conteudo.value[perguntasController.questionIndex.value] != null &&
+                                perguntasController.conteudo.value[perguntasController.questionIndex.value].respostaText)
                             ? Container(
                                 margin: EdgeInsets.all(40),
                                 child: TextField(
@@ -631,7 +581,7 @@ class _PerguntasState extends State<Perguntas>
                           margin:
                               EdgeInsets.only(bottom: 10, left: 10, right: 10),
                           padding: EdgeInsets.all(20),
-                          child: questionIndex < conteudo.length - 1
+                          child: perguntasController.questionIndex.value < perguntasController.conteudo.value.length - 1
                               ? RaisedButton(
                                   color: Colors.red[50],
                                   padding: EdgeInsets.all(10),
@@ -645,7 +595,7 @@ class _PerguntasState extends State<Perguntas>
                                       _rotationController.value = 0;
                                       _rotationController.forward();
                                     }
-                                    _buttonAvancar();
+                                    perguntasController.buttonAvancar();
                                   },
                                 )
                               : RaisedButton(
@@ -657,7 +607,7 @@ class _PerguntasState extends State<Perguntas>
                                         color: Colors.white, fontSize: 18),
                                   ),
                                   onPressed: () {
-                                    if (conteudo.length - 1 == questionIndex) {
+                                    if (perguntasController.conteudo.value.length - 1 == perguntasController.questionIndex.value) {
                                       respostas[questionIndex]["valor"] =
                                           respostaController.text != ""
                                               ? respostaController.text
@@ -671,9 +621,10 @@ class _PerguntasState extends State<Perguntas>
                       ],
                     ),
                   ),
-                ),
-      // ),
+                )),
     );
+
+    // ),
   }
 }
 

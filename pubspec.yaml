@@ -19,6 +19,7 @@ dependencies:
   http: ^0.12.2
   device_preview: ^0.5.5
   auto_size_text: ^2.1.0
+  get: ^3.24.0
 
 dev_dependencies:
   flutter_test:

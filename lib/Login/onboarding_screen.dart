@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:natuvida_flutter/Login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'home.dart';
+import '../Home/home.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -57,26 +57,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: false,
         body: AnnotatedRegion<SystemUiOverlayStyle>(
           value: SystemUiOverlayStyle.dark,
           child: Container(
             decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [
-                  0.1,
-                  0.4,
-                  0.7,
-                  0.9
-                ],
-                    colors: [
-                  Color(0xbb29917d),
-                  Color(0xff329c70),
-                  Color(0xdd329c5c),
-                  Color(0xdd30bf51),
-                ])),
+                gradient:
+                    LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, stops: [
+              0.1,
+              0.4,
+              0.7,
+              0.9
+            ], colors: [
+              Color(0xbb29917d),
+              Color(0xff329c70),
+              Color(0xdd329c5c),
+              Color(0xdd30bf51),
+            ])),
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 40.0),
               child: Column(
@@ -85,32 +81,37 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: FlatButton(
-                        onPressed: () {
-                          prefs.setString('nomeCompleto', _nome.text);
-                  prefs.setString('email', _email.text);
-                  // prefs.setBool('isLogged', true);
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
-                        },
-                        child: Row(mainAxisSize: MainAxisSize.min, children: [
-                          Text(
-                            "Pular",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Icon(Icons.arrow_forward_ios, color: Colors.white,)
-                        ]),),
-                  ),
-                  (MediaQuery.of(context).size.height < 550) 
-                  ? Container()
-                  :Center(
-                    child: Container(
-                        // height: 200,
-                        height: (MediaQuery.of(context).size.height * 0.2),
-                        child: Image.asset(
-                          'assets/natuvida_logo.png',
+                      onPressed: () {
+                        prefs.setString('nomeCompleto', _nome.text);
+                        prefs.setString('email', _email.text);
+                        // prefs.setBool('isLogged', true);
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
+                      },
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        Text(
+                          "Pular",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
                           color: Colors.white,
-                          fit: BoxFit.fill,
-                        )),
+                        )
+                      ]),
+                    ),
                   ),
+                  (MediaQuery.of(context).size.height < 550)
+                      ? Container()
+                      : Center(
+                          child: Container(
+                              // height: 200,
+                              height: (MediaQuery.of(context).size.height * 0.2),
+                              child: Image.asset(
+                                'assets/natuvida_logo.png',
+                                color: Colors.white,
+                                fit: BoxFit.fill,
+                              )),
+                        ),
                   Container(
                     // height: 400,
                     height: (MediaQuery.of(context).size.height * 0.55),
@@ -134,17 +135,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               Text(
                                 "Bem-Vindo ao Business Capacitation",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold),
+                                    color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
                                 height: 30,
                               ),
                               Text(
                                 "Antes de começarmos, gostaríamos de conhecer você melhor.",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
+                                style: TextStyle(color: Colors.white, fontSize: 20),
                               )
                             ],
                           ),
@@ -160,9 +158,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               Text(
                                 "Gostariamos que se apresentasse",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold),
+                                    color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
                                 height: 15,
@@ -189,9 +185,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               Text(
                                 "Seu email",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold),
+                                    color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
                                 height: 15,
@@ -217,13 +211,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   // height: 30,
                                   height: (MediaQuery.of(context).size.height * 0.03),
                                 ),
-                                Container(child: Text(
-                                  "Você realmente parece estar interessado (a) em mudanças.\nVocê está preparado para iniciar um desenvolvimento pessoal juntamente com seu trabalho?",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),),
+                                Container(
+                                  child: Text(
+                                    "Você realmente parece estar interessado (a) em mudanças.\nVocê está preparado para iniciar um desenvolvimento pessoal juntamente com seu trabalho?",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
                                 SizedBox(
                                   height: 20,
                                 ),
@@ -251,8 +247,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   child: Text("Não",
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
-                                          color: colorButton == 0 ||
-                                                  colorButton == 1
+                                          color: colorButton == 0 || colorButton == 1
                                               ? Colors.black87
                                               : Colors.white,
                                           fontSize: 14,
@@ -278,9 +273,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               Text(
                                 "Antes de começar o primeiro tema, gostaria de lembrar que você é a pessoa que melhor conhece a si mesmo.\nPor isso, juntos podemos desenvolver mudanças importantes, basta você querer e colocar em prática.",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
+                                    color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
                                 height: 15,
@@ -291,8 +284,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                     : Colors.greenAccent,
                                 child: Text(
                                   "SIM, EU QUERO EVOLUIR",
-                                  style: TextStyle(
-                                      color: Colors.black87, fontSize: 18),
+                                  style: TextStyle(color: Colors.black87, fontSize: 18),
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -309,10 +301,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   child: Text(
                                     "NÃO, PREFIRO FAZER ISSO SOZINHO(A)",
                                     style: TextStyle(
-                                        color:
-                                            colorButton == 0 || colorButton == 1
-                                                ? Colors.black87
-                                                : Colors.white,
+                                        color: colorButton == 0 || colorButton == 1
+                                            ? Colors.black87
+                                            : Colors.white,
                                         fontSize: 16),
                                   ),
                                 ),
@@ -349,9 +340,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         child: Text(
                           "Começar",
                           style: TextStyle(
-                              color: Color(0xdd30bf51),
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              color: Color(0xdd30bf51), fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
                     )),
@@ -359,7 +348,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   prefs.setString('nomeCompleto', _nome.text);
                   prefs.setString('email', _email.text);
                   // prefs.setBool('isLogged', true);
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
                 },
               )
             : Text(''));

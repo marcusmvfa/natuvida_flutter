@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:natuvida_flutter/Home/home.dart';
+import 'package:natuvida_flutter/bindings/postagemBinding%20copy.dart';
 
 class Finalizar extends StatefulWidget {
   final String argument;
@@ -12,6 +15,8 @@ class _FinalizarState extends State<Finalizar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          brightness: Brightness.light,
+
         backgroundColor: Colors.white,
         iconTheme: new IconThemeData(color: Colors.black),
         title: Container(
@@ -106,7 +111,7 @@ class _FinalizarState extends State<Finalizar> {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/home');
+                      Get.to(Home(), binding: ModulosBinding());
                     },
                   ),
                 ),

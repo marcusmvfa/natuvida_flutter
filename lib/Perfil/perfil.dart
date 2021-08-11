@@ -100,7 +100,10 @@ String url = "https://secure-temple-09752.herokuapp.com/putUser";
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Perfil"),
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.white,
+        brightness: Brightness.light,
+        title: Text("Perfil",style: TextStyle(color: Colors.black),),
       ),
       body: Builder(
         builder: (context) => SingleChildScrollView(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:natuvida_flutter/Home/onboarding_screen.dart';
+import 'package:get/get.dart';
+import 'package:natuvida_flutter/Login/onboarding_screen.dart';
 import 'package:natuvida_flutter/Login/login.dart';
 import 'package:natuvida_flutter/Postagem/perguntas.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +10,8 @@ import 'Postagem/finalizar.dart';
 import 'Postagem/postagem.dart';
 import 'SobreNos/sobre_nos.dart';
 import 'package:device_preview/device_preview.dart';
+
+import 'bindings/perguntaBinding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +41,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
+      
       debugShowCheckedModeBanner: false,
         title: 'Bussiness Capacitation',
         initialRoute: '/',
@@ -50,12 +54,16 @@ class MyApp extends StatelessWidget {
           '/finalizar': (context) => Finalizar(),
           '/sobrenos': (context) => SobreNos()
         },
+        getPages: [
+          GetPage(name: "/perguntas", page: () => Perguntas(), binding: PerguntaBinding())
+        ],
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         // locale: DevicePreview.locale(context), // Add the locale here
         // builder: DevicePreview.appBuilder,
-        home: page);
+        home: page,
+        );
   }
 }

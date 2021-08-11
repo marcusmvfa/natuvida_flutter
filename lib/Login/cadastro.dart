@@ -66,6 +66,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
       child: Scaffold(
         // resizeToAvoidBottomPadding: false,
         appBar: AppBar(
+          brightness: Brightness.light,
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Colors.black),
         ),

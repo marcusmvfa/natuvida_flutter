@@ -10,6 +10,7 @@ class _SobreNosState extends State<SobreNos> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         iconTheme: new IconThemeData(color: Colors.black),
         title: Container(
@@ -84,7 +85,7 @@ class _SobreNosState extends State<SobreNos> {
                     margin: EdgeInsets.all(15),
                     width: 200,
                     child: Text(
-                      "Acadêmica do curso de Psicologia - 10º Período",
+                      "Psicóloga",
                       style: TextStyle(fontSize: 16),
                     ),
                   )

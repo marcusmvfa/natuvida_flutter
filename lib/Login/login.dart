@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:natuvida_flutter/Home/home.dart';
 import 'package:natuvida_flutter/Login/cadastro.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,7 +54,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         // resizeToAvoidBottomPadding: false,
-        body: SingleChildScrollView(
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.dark,
+          child: SingleChildScrollView(
           child: Container(
             child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
@@ -156,6 +159,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       
-    );
+    ),);
   }
 }
