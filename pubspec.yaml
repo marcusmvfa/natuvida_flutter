@@ -6,20 +6,21 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.0
-  youtube_player_flutter: ^7.0.0+7
-  url_launcher: ^5.7.0
-  shared_preferences: ^0.5.6+1
-  http: ^0.12.2
-  device_preview: ^0.5.5
-  auto_size_text: ^2.1.0
-  get: ^3.24.0
+  cupertino_icons: ^1.0.3
+  youtube_player_flutter: ^8.0.0
+  url_launcher: ^6.0.9
+  shared_preferences: ^2.0.6
+  http: ^0.13.3
+  device_preview: ^0.7.4
+  auto_size_text: ^3.0.0-nullsafety.0
+  get: ^4.3.6
+  google_fonts: ^2.2.0
 
 dev_dependencies:
   flutter_test:

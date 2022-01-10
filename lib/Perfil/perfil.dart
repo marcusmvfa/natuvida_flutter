@@ -18,7 +18,7 @@ class _PerfilViewState extends State<PerfilView> {
   TextEditingController emailController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
   bool flagEdita = false;
-  SharedPreferences prefs;
+  late SharedPreferences? prefs;
   UserModel user = new UserModel();
   bool _requstAtiva = false;
 
@@ -26,7 +26,7 @@ class _PerfilViewState extends State<PerfilView> {
     SharedPreferences.getInstance().then((preferences) {
       this.prefs = preferences;
       // nameController.text = await prefs.getString()
-      var decode1 = jsonDecode(prefs.getString("userData"));
+      var decode1 = jsonDecode(prefs!.getString("userData")!);
       // var decode2 = jsonDecode(decode1);
 
       user = UserModel.fromJson(decode1);
@@ -39,14 +39,14 @@ class _PerfilViewState extends State<PerfilView> {
 
   _processaRequisicao(context) {
     setState(() {
-    _requstAtiva = true;
+      _requstAtiva = true;
     });
 
     user.nome = nameController.text;
     user.email = emailController.text;
     user.telefone = phoneController.text;
 
-    Scaffold.of(context).showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
           'Processando Requisição...',
@@ -55,38 +55,38 @@ class _PerfilViewState extends State<PerfilView> {
       ),
     );
 
-String url = "https://secure-temple-09752.herokuapp.com/putUser";
+    String url = "https://secure-temple-09752.herokuapp.com/putUser";
 
-    http.put(url, body: {
+    http.put(Uri(path: url), body: {
       "_id": user.id,
       "nome": user.nome,
-      "email" : user.email,
-      "fone" : user.telefone
+      "email": user.email,
+      "fone": user.telefone
     }).then((response) {
-      if(response.statusCode == 200 && response.body != null){
+      if (response.statusCode == 200 && response.body != null) {
         var jsonfilho = user.toJson();
-        prefs.setString("userData", jsonEncode(jsonfilho));
-        Scaffold.of(context).showSnackBar(
-      SnackBar(backgroundColor: Colors.green,
-        content: Text(
-          'Salvo com Sucesso!',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-    setState(() {
-      _requstAtiva = false;
-    });
+        prefs!.setString("userData", jsonEncode(jsonfilho));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Text(
+              'Salvo com Sucesso!',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+        setState(() {
+          _requstAtiva = false;
+        });
       }
     });
-
   }
 
   _logout(context) {
-    prefs.remove("userData");
-    prefs.setBool("isLogged", false);
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
+    prefs!.remove("userData");
+    prefs!.setBool("isLogged", false);
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
   }
 
   @override
@@ -103,15 +103,21 @@ String url = "https://secure-temple-09752.herokuapp.com/putUser";
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
         brightness: Brightness.light,
-        title: Text("Perfil",style: TextStyle(color: Colors.black),),
+        title: Text(
+          "Perfil",
+          style: TextStyle(color: Colors.black),
+        ),
       ),
       body: Builder(
         builder: (context) => SingleChildScrollView(
-          child: Stack(
-            children: [
-            ClipPath(clipper: CustomPathClip(),
-            child: Container(color: Colors.green,),),
-              Column(
+          child: Stack(children: [
+            ClipPath(
+              clipper: CustomPathClip(),
+              child: Container(
+                color: Colors.green,
+              ),
+            ),
+            Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
@@ -128,30 +134,24 @@ String url = "https://secure-temple-09752.herokuapp.com/putUser";
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
+                  padding: EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
                   child: TextField(
                     controller: nameController,
-                    decoration:
-                        InputDecoration(labelText: "Nome", enabled: flagEdita),
+                    decoration: InputDecoration(labelText: "Nome", enabled: flagEdita),
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
+                  padding: EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
                   child: TextField(
                     controller: emailController,
-                    decoration: InputDecoration(
-                        labelText: "E-mail", enabled: flagEdita),
+                    decoration: InputDecoration(labelText: "E-mail", enabled: flagEdita),
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 30),
+                  padding: EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 30),
                   child: TextField(
                     controller: phoneController,
-                    decoration: InputDecoration(
-                        labelText: "Telefone", enabled: flagEdita),
+                    decoration: InputDecoration(labelText: "Telefone", enabled: flagEdita),
                   ),
                 ),
                 ButtonTheme(
@@ -170,10 +170,14 @@ String url = "https://secure-temple-09752.herokuapp.com/putUser";
                         flagEdita = !flagEdita;
                       });
                     },
-                    child: _requstAtiva ? CircularProgressIndicator(backgroundColor: Colors.white,) : Text(
-                      flagEdita ? "Salvar Perfil" : "Editar Perfil",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
+                    child: _requstAtiva
+                        ? CircularProgressIndicator(
+                            backgroundColor: Colors.white,
+                          )
+                        : Text(
+                            flagEdita ? "Salvar Perfil" : "Editar Perfil",
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
                   ),
                 ),
                 SizedBox(height: 20),
@@ -203,9 +207,8 @@ String url = "https://secure-temple-09752.herokuapp.com/putUser";
                 )
               ],
             ),
-          ]
+          ]),
         ),
-      ),
       ),
     );
   }

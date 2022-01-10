@@ -15,10 +15,10 @@ import 'bindings/perguntaBinding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+  SharedPreferences? prefs = await SharedPreferences.getInstance();
   var page;
 
-  bool login = prefs.getBool("isLogged");
+  bool? login = prefs.getBool("isLogged");
 
   if (login == null) {
     login = false;
@@ -27,43 +27,43 @@ void main() async {
   page = login == false ? OnboardingScreen() : Home();
   runApp(
     // DevicePreview(
-      // builder: (context) => MyApp(page: page),
-      MyApp(page: page),
+    // builder: (context) => MyApp(page: page),
+    MyApp(page: page),
     // ),
   );
 }
 
 class MyApp extends StatelessWidget {
   var page;
-  MyApp({Key key, this.page}) : super(key: key);
+  MyApp({Key? key, this.page}) : super(key: key);
 
   // This widget is the root of your application.
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      
       debugShowCheckedModeBanner: false,
-        title: 'Bussiness Capacitation',
-        initialRoute: '/',
-        routes: {
-          // '/': (context) => Home(),
-          '/home': (context) => Home(),
-          '/postagem': (context) => Postagem(),
-          '/perguntas': (context) => Perguntas(),
-          '/finalizar': (context) => Finalizar(),
-          '/sobrenos': (context) => SobreNos()
-        },
-        getPages: [
-          GetPage(name: "/perguntas", page: () => Perguntas(), binding: PerguntaBinding())
-        ],
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        // locale: DevicePreview.locale(context), // Add the locale here
-        // builder: DevicePreview.appBuilder,
-        home: page,
-        );
+      title: 'Bussiness Capacitation',
+      initialRoute: '/',
+      routes: {
+        // '/': (context) => Home(),
+        '/home': (context) => Home(),
+        '/postagem': (context) => Postagem(),
+        '/perguntas': (context) => Perguntas(),
+        '/finalizar': (context) => Finalizar(),
+        '/sobrenos': (context) => SobreNos()
+      },
+      getPages: [GetPage(name: "/perguntas", page: () => Perguntas(), binding: PerguntaBinding())],
+
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        primaryColor: Color(0xffF9F9F9),
+        cardColor: Color(0xffD3E4CD),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      // locale: DevicePreview.locale(context), // Add the locale here
+      // builder: DevicePreview.appBuilder,
+      home: page,
+    );
   }
 }

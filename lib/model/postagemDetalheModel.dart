@@ -1,26 +1,33 @@
 class PostagemDetalheModel {
-  final String id;
-  final String texto;
-  final bool flPergunta;
-  final bool respostaText;
-  String video;
-  final String img;
-  final String title;
-  int index;
-  final List multipla;
-  
-  PostagemDetalheModel({ this.id, this.texto, this.flPergunta, this.respostaText, this.video, this.img, this.title, this.multipla});
+  String? id;
+  String? texto;
+  bool? flPergunta;
+  bool? respostaText;
+  String? video;
+  String? img;
+  String? title;
+  int? index;
+  List? multipla;
+
+  PostagemDetalheModel(
+      {this.id,
+      this.texto,
+      this.flPergunta,
+      this.respostaText,
+      this.video,
+      this.img,
+      this.title,
+      this.multipla});
 
   factory PostagemDetalheModel.fromJson(Map<String, dynamic> json) {
     return new PostagemDetalheModel(
-      id: json['_id'] as String,
-      texto: json['texto'] as String,
-      flPergunta: json['flPergunta'] as bool,
-      respostaText: json['respostaText'] as bool,
-      video: json['video'] as String,
-      img: json['img'] as String,
-      title: json['title'] as String,
-      multipla: json['multiplas'] as List
-    );
+        id: json['_id'],
+        texto: json['texto'],
+        flPergunta: json['flPergunta'],
+        respostaText: json['respostaText'],
+        video: json['video'],
+        img: json['img'],
+        title: json['title'],
+        multipla: json['multiplas']);
   }
 }

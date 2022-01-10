@@ -5,41 +5,36 @@ import 'package:natuvida_flutter/Postagem/perguntas.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class Postagem extends StatefulWidget {
-  final String argument;
+  String? argument;
 
-  const Postagem({Key key, this.argument}) : super(key: key);
+  Postagem({Key? key, this.argument}) : super(key: key);
 
   @override
   _PostagemState createState() => _PostagemState();
 }
 
-class _PostagemState extends State<Postagem>
-    with SingleTickerProviderStateMixin {
-  Animation<double> animation;
-  AnimationController controller;
+class _PostagemState extends State<Postagem> with SingleTickerProviderStateMixin {
+  Animation<double>? animation;
+  AnimationController? controller;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-  YoutubePlayerController _controller;
+  YoutubePlayerController? _controller;
 
-  String caminho;
-
+  String? caminho;
 
   void carregaArquivo(String arg) async {
     String argumento = arg;
     switch (argumento) {
       case 'auto-conhecimento':
-        caminho = await rootBundle
-            .loadString("assets/Auto-Conhecimento-Conteudo.json");
+        caminho = await rootBundle.loadString("assets/Auto-Conhecimento-Conteudo.json");
         break;
 
       case 'emocoes':
-        caminho = await rootBundle
-            .loadString("assets/Emocoes_e_cinco_linguagens_do_amor.json");
+        caminho = await rootBundle.loadString("assets/Emocoes_e_cinco_linguagens_do_amor.json");
         print(caminho);
         break;
 
-        case 'maslow':
-        caminho = await rootBundle
-            .loadString("assets/Piramide_de_Maslow.json");
+      case 'maslow':
+        caminho = await rootBundle.loadString("assets/Piramide_de_Maslow.json");
         print(caminho);
         break;
     }
@@ -48,7 +43,7 @@ class _PostagemState extends State<Postagem>
   @override
   void initState() {
     super.initState();
-    carregaArquivo(widget.argument);
+    carregaArquivo(widget.argument!);
 
     _controller = YoutubePlayerController(
       initialVideoId: 'https://youtu.be/9OiWA0qawIo',
@@ -69,7 +64,7 @@ class _PostagemState extends State<Postagem>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     // TODO: implement dispose
     super.dispose();
   }
@@ -77,7 +72,7 @@ class _PostagemState extends State<Postagem>
   @override
   void deactivate() {
     // Pauses video while navigating to next page.
-    _controller.pause();
+    _controller!.pause();
     super.deactivate();
   }
 
@@ -116,9 +111,7 @@ class _PostagemState extends State<Postagem>
                       label: Text(
                         "Auto Conhecimento",
                         style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12),
+                            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
                       ),
                       backgroundColor: Colors.lightGreen[600]),
                 ),
@@ -162,7 +155,7 @@ class _PostagemState extends State<Postagem>
               Container(
                 padding: EdgeInsets.only(bottom: 20),
                 height: 500,
-                // child: 
+                // child:
               ),
               Center(
                 child: Padding(
@@ -177,10 +170,8 @@ class _PostagemState extends State<Postagem>
                 child: Padding(
                   padding: EdgeInsets.only(top: 10),
                   child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    padding: EdgeInsets.only(
-                        left: 40, right: 40, top: 10, bottom: 10),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.only(left: 40, right: 40, top: 10, bottom: 10),
                     color: Colors.red[50],
                     child: Text(
                       "Começar",

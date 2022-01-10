@@ -9,73 +9,71 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:natuvida_flutter/Services/requests.dart' as Requests;
 
 class PerguntasController extends GetxController {
-  
   var id;
-  SharedPreferences prefs;
+  late SharedPreferences prefs;
   Rx<RxList<PostagemDetalheModel>> conteudo = RxList<PostagemDetalheModel>().obs;
   Rx<RxList> respostas = RxList().obs;
-  YoutubePlayerController youtubePlayerController;
+  YoutubePlayerController? youtubePlayerController;
   RxBool isLoading = true.obs;
   final respostaController = TextEditingController();
-
 
   var questionIndex = 0.obs;
 
   RxString questionText = "".obs;
 
-void buttonAvancar() {
+  void buttonAvancar() {
     if (youtubePlayerController != null) youtubePlayerController = null;
     if (questionIndex.value < conteudo.value.length - 1) {
-        this.respostas.value[questionIndex.value]["valor"] = respostaController.text != ""
-            ? respostaController.text
-            : this.respostas.value[questionIndex.value]["valor"];
+      this.respostas.value[questionIndex.value]["valor"] = respostaController.text != ""
+          ? respostaController.text
+          : this.respostas.value[questionIndex.value]["valor"];
 
-        // setRespostasPreferences(this.respostas);
+      // setRespostasPreferences(this.respostas);
 
-        questionIndex.value++;
-        questionText.value = conteudo.value[questionIndex.value].texto;
-        if (this.respostas.value[questionIndex.value]["valor"].toString().isNotEmpty)
-          respostaController.text = this.respostas.value[questionIndex.value]["valor"];
-        else
-          respostaController.text = "";
-        if (conteudo.value[questionIndex.value].video != null &&
-            conteudo.value[questionIndex.value].video != "") {
-          conteudo.value[questionIndex.value].video =
-              YoutubePlayer.convertUrlToId(conteudo.value[questionIndex.value].video);
-          youtubePlayerController = YoutubePlayerController(
-            initialVideoId: conteudo.value[questionIndex.value].video,
-            flags: YoutubePlayerFlags(
-              autoPlay: true,
-              mute: false,
-            ),
-          )..reset();
-        }
+      questionIndex.value++;
+      questionText.value = conteudo.value[questionIndex.value].texto!;
+      if (this.respostas.value[questionIndex.value]["valor"].toString().isNotEmpty)
+        respostaController.text = this.respostas.value[questionIndex.value]["valor"];
+      else
+        respostaController.text = "";
+      if (conteudo.value[questionIndex.value].video != null &&
+          conteudo.value[questionIndex.value].video != "") {
+        conteudo.value[questionIndex.value].video =
+            YoutubePlayer.convertUrlToId(conteudo.value[questionIndex.value].video!);
+        youtubePlayerController = YoutubePlayerController(
+          initialVideoId: conteudo.value[questionIndex.value].video!,
+          flags: YoutubePlayerFlags(
+            autoPlay: true,
+            mute: false,
+          ),
+        )..reset();
+      }
     }
   }
-Future getPostagemDetalhes() async {
+
+  Future getPostagemDetalhes() async {
     try {
       var response = await Requests.getPostagemDetalhes(id.toString());
       List list = json.decode(response.body);
-      RxList<PostagemDetalheModel> listDetalehs =
-          new RxList<PostagemDetalheModel>();
+      RxList<PostagemDetalheModel> listDetalehs = new RxList<PostagemDetalheModel>();
       list.forEach((element) {
         var detail = PostagemDetalheModel.fromJson(element);
         listDetalehs.add(detail);
       });
-        conteudo.value = listDetalehs;
-        isLoading.value = false;
+      conteudo.value = listDetalehs;
+      isLoading.value = false;
     } catch (e) {
       print(e);
     }
   }
-  void geraPerguntas() {
+
+  geraPerguntas() {
     var userDataJson = prefs.getString("userData");
-    var decoded = jsonDecode(userDataJson);
+    var decoded = jsonDecode(userDataJson!);
     var userData = UserModel.fromJson(decoded);
     // var respostasDecode = jsonDecode(prefs.getString("respostas"));
     this.conteudo.value.forEach((element) {
-      this.respostas.value.add(
-          {"idPergunta": element.id, "idUsuario": userData.id, "valor": ""});
+      this.respostas.value.add({"idPergunta": element.id, "idUsuario": userData.id, "valor": ""});
     });
   }
 
@@ -84,25 +82,24 @@ Future getPostagemDetalhes() async {
         conteudo.value[questionIndex.value].video != null &&
         conteudo.value[questionIndex.value].video != "") {
       conteudo.value[questionIndex.value].video =
-          YoutubePlayer.convertUrlToId(conteudo.value[questionIndex.value].video);
+          YoutubePlayer.convertUrlToId(conteudo.value[questionIndex.value].video!);
       youtubePlayerController = YoutubePlayerController(
-        initialVideoId: conteudo.value[questionIndex.value].video,
+        initialVideoId: conteudo.value[questionIndex.value].video!,
         flags: YoutubePlayerFlags(
           autoPlay: true,
           mute: false,
         ),
       )..reset();
     }
-      if(conteudo.value.length > 0)
-      questionText = conteudo.value[0].texto.obs;
+    if (conteudo.value.length > 0) questionText = conteudo.value[0].texto!.obs;
     geraPerguntas();
   }
 
-  void getPrefs() async {
+  Future<void> getPrefs() async {
     prefs = await SharedPreferences.getInstance();
   }
 
-  instantiateController(){
+  instantiateController() {
     getPostagemDetalhes().then((val) async {
       await getPrefs();
       parseJson();

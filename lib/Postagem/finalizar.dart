@@ -4,8 +4,8 @@ import 'package:natuvida_flutter/Home/home.dart';
 import 'package:natuvida_flutter/bindings/postagemBinding%20copy.dart';
 
 class Finalizar extends StatefulWidget {
-  final String argument;
-  const Finalizar({Key key, this.argument}) : super(key: key);
+  String? argument;
+  Finalizar({Key? key, this.argument}) : super(key: key);
   @override
   _FinalizarState createState() => _FinalizarState();
 }
@@ -15,8 +15,7 @@ class _FinalizarState extends State<Finalizar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          brightness: Brightness.light,
-
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         iconTheme: new IconThemeData(color: Colors.black),
         title: Container(
@@ -54,7 +53,7 @@ class _FinalizarState extends State<Finalizar> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   child: Image.network(
-                    "https://secure-temple-09752.herokuapp.com" + widget.argument,
+                    "https://secure-temple-09752.herokuapp.com" + widget.argument!,
                     fit: BoxFit.fill,
                     // image: AssetImage('assets/imgPosts/' + widget.argument),
                     // height: 110,
@@ -86,11 +85,50 @@ class _FinalizarState extends State<Finalizar> {
                 child: Stack(
                   alignment: AlignmentDirectional.topCenter,
                   children: [
-                    Positioned(right: 130, child: Icon(Icons.star,size: 120, color: Colors.amber,),),
-                    Positioned(right: 60, top: 180, child: Opacity(opacity: 0.6, child: Icon(Icons.star,size: 100, color: Colors.amber),),),
-                    Positioned(right: 20, top: 130, child: Opacity(opacity: 0.7, child: Icon(Icons.star,size: 100, color: Colors.amber),),),
-                    Positioned(right: 40, top: 90, child: Opacity(opacity: 0.8, child: Icon(Icons.star,size: 100, color: Colors.amber),),),
-                    Positioned(right: 90, top: 50, child: Opacity(opacity: 0.9, child: Icon(Icons.star,size: 100, color: Colors.amber,),),),
+                    Positioned(
+                      right: 130,
+                      child: Icon(
+                        Icons.star,
+                        size: 120,
+                        color: Colors.amber,
+                      ),
+                    ),
+                    Positioned(
+                      right: 60,
+                      top: 180,
+                      child: Opacity(
+                        opacity: 0.6,
+                        child: Icon(Icons.star, size: 100, color: Colors.amber),
+                      ),
+                    ),
+                    Positioned(
+                      right: 20,
+                      top: 130,
+                      child: Opacity(
+                        opacity: 0.7,
+                        child: Icon(Icons.star, size: 100, color: Colors.amber),
+                      ),
+                    ),
+                    Positioned(
+                      right: 40,
+                      top: 90,
+                      child: Opacity(
+                        opacity: 0.8,
+                        child: Icon(Icons.star, size: 100, color: Colors.amber),
+                      ),
+                    ),
+                    Positioned(
+                      right: 90,
+                      top: 50,
+                      child: Opacity(
+                        opacity: 0.9,
+                        child: Icon(
+                          Icons.star,
+                          size: 100,
+                          color: Colors.amber,
+                        ),
+                      ),
+                    ),
                     // Positioned(child: Icon(Icons.star),),
                   ],
                 ),
@@ -99,10 +137,8 @@ class _FinalizarState extends State<Finalizar> {
                 child: Padding(
                   padding: EdgeInsets.only(top: 10),
                   child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    padding: EdgeInsets.only(
-                        left: 40, right: 40, top: 10, bottom: 10),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.only(left: 40, right: 40, top: 10, bottom: 10),
                     color: Colors.red[50],
                     child: Text(
                       "Fechar",

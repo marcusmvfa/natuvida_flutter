@@ -27,17 +27,15 @@ class _CadastroScreenState extends State<CadastroScreen> {
       reqAtiva = true;
     });
     var resp = await http
-        .post("https://secure-temple-09752.herokuapp.com/postNewUser",
-            body: newUser)
+        .post(new Uri(path: "https://secure-temple-09752.herokuapp.com/postNewUser"), body: newUser)
         .then((response) {
       if (response.statusCode == 200) {
-        Scaffold.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.green,
-            content: Text(
-                'Usuário Cadastrado!! Retorne a tela de login para entrar',
+            content: Text('Usuário Cadastrado!! Retorne a tela de login para entrar',
                 style: TextStyle(color: Colors.white))));
       } else {
-        Scaffold.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red,
             content: Text(
               response.body,
@@ -47,14 +45,14 @@ class _CadastroScreenState extends State<CadastroScreen> {
       setState(() {
         reqAtiva = false;
       });
-    }).catchError((onError){
-      Scaffold.of(context).showSnackBar(SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(
-              'Ocorreu um erro tente novamente!',
-              style: TextStyle(color: Colors.white),
-            )));
-      setState((){
+    }).catchError((onError) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            'Ocorreu um erro tente novamente!',
+            style: TextStyle(color: Colors.white),
+          )));
+      setState(() {
         reqAtiva = false;
       });
     });
@@ -63,25 +61,28 @@ class _CadastroScreenState extends State<CadastroScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
       child: Scaffold(
         // resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           brightness: Brightness.light,
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Colors.black),
+          title: Text(
+            "Cadastro de Usuário",
+            style: TextStyle(color: Colors.black),
+          ),
         ),
         body: Container(
           padding: EdgeInsets.only(bottom: 20),
           child: SingleChildScrollView(
-            child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
+            child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
               return Form(
                 key: _formKey,
                 child: Column(children: [
                   Center(
                     child: Image.asset('assets/natuvida_logo.png',
-                        height: (MediaQuery.of(context).size.height * 0.3),
-                        color: Colors.green),
+                        height: (MediaQuery.of(context).size.height * 0.3), color: Colors.green),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 30, left: 30, right: 30),
@@ -97,7 +98,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         ),
                         // The validator receives the text that the user has entered.
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value!.isEmpty) {
                             return "Insira um Nome!";
                           }
                           return null;
@@ -119,7 +120,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         ),
                         // The validator receives the text that the user has entered.
                         validator: (value) {
-                          if (value.isEmpty || !value.contains('@')) {
+                          if (value!.isEmpty || !value.contains('@')) {
                             return "Insira um e-mail válido!";
                           }
                           return null;
@@ -141,7 +142,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                             helperText: "Insira apenas números"),
                         // The validator receives the text that the user has entered.
                         validator: (value) {
-                          if (value.isEmpty || value.length < 6) {
+                          if (value!.isEmpty || value.length < 6) {
                             return "Insira um número válido!";
                           }
                           return null;
@@ -163,7 +164,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         ),
                         // The validator receives the text that the user has entered.
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value!.isEmpty) {
                             return "Insira sua senha!";
                           }
                           return null;
@@ -185,7 +186,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                         ),
                         // The validator receives the text that the user has entered.
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value!.isEmpty) {
                             return "Campo obrigatório!";
                           } else if (_senhaController.text != value) {
                             return "Senhas não coincidem!";
@@ -198,26 +199,27 @@ class _CadastroScreenState extends State<CadastroScreen> {
                   SizedBox(
                     height: 15,
                   ),
-                  reqAtiva ? CircularProgressIndicator():
-                  RaisedButton(
-                    color: Colors.green,
-                    onPressed: () {
-                      // Validate returns true if the form is valid, otherwise false.
-                      if (_formKey.currentState.validate()) {
-                        // If the form is valid, display a snackbar. In the real world,
-                        // you'd often call a server or save the information in a database.
+                  reqAtiva
+                      ? CircularProgressIndicator()
+                      : RaisedButton(
+                          color: Colors.green,
+                          onPressed: () {
+                            // Validate returns true if the form is valid, otherwise false.
+                            if (_formKey.currentState!.validate()) {
+                              // If the form is valid, display a snackbar. In the real world,
+                              // you'd often call a server or save the information in a database.
 
-                        Scaffold.of(context).showSnackBar(
-                            SnackBar(content: Text('Processando requisição')));
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(content: Text('Processando requisição')));
 
-                        postNewUser(context);
-                      }
-                    },
-                    child: Text(
-                      'Cadastrar',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                              postNewUser(context);
+                            }
+                          },
+                          child: Text(
+                            'Cadastrar',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
                 ]),
               );
             }),
